@@ -1,0 +1,15 @@
+*~
+.DS_Store
+.idea
+sqlnet.log
+*.log
+*.pid
+*.pyc
+*.pot
+gunicorn.py
+.vagrant
+*.sqlite3
+*.db
+secure.py
+jwplayer/
+data/

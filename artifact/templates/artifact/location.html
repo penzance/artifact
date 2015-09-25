@@ -1,0 +1,115 @@
+{% extends 'artifact/base.html' %}
+{% load static %}
+{% load djangular_tags %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'artifact/css/location.css' %}" />
+{% endblock css %}
+
+
+{% block js %}
+ 	<script>
+        window.globals.MAP_ID = {{map_id}};
+    </script>
+    <script src="//maps.googleapis.com/maps/api/js" type="text/javascript"></script>
+    <script src="{% static 'artifact/js/angularapp.js' %}" type="text/javascript"></script>
+    <script src="{% static 'artifact/js/controllers/location_controller.js' %}" type="text/javascript"></script>
+{% endblock js %}
+
+{% block body %}
+
+{% verbatim %}
+<body  ng-app="app">
+	<div class="container" ng-controller="LocationController">
+	
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<h1>{{maptitle}}</h1>
+			</div>
+		</div>
+
+		<div class="row">
+		
+			<div class="col-xs-12 col-md-9">
+				<div id="map-canvas"></div>
+				<h3>Markers</h3>
+				<ul>
+					<li id="class" ng-repeat="marker in markers | orderBy : 'title'">
+         				<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-xs-8 col-md-3">
+				<h3>{{title}}</h3>
+				<p>{{description}}</p>
+				<p><a href="{{external_url}}">{{external_url}}</a></p>
+			</div>
+			
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+		  <div class="modal-dialog">
+			<!-- Modal content-->
+
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Modal Header</h4>
+			  </div>
+
+			  <div class="modal-body">
+				<form ng-submit="processForm()">
+				  
+				  <div id="title-group" class="form-group" ng-class="{ 'has-error' : errorTitle }">
+				  	<label class="control-label requiredField" for="id_title">Enter the title</label>
+				  	<input type="text" name="title" ng-model="formData.title" maxlength="50" id="id_title" class="form-control" />
+				  	<span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span> 
+				  </div>
+				  
+				  <div id="description-group" class="form-group" ng-class="{ 'has-error' : errorDescription }">
+				  	<label class="control-label requiredField" for="id_description">Enter a description</label>
+				  	<textarea name="description" ng-model="formData.description" id="id_description" class="form-control" cols="30" rows="10"></textarea>	  	
+				  	<span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span> 
+				  </div>
+				  
+				  <div id="latitude-group" class="form-group" ng-class="{ 'has-error' : errorlatitude }">
+					<label class="control-label" for="id_latitude">latitude</label> 
+					<input type="text" id="id_latitude" name="latitude" ng-model="formData.latitude" maxlength="25" class="form-control"/>
+					<span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span> 
+				  </div>
+				  
+				  <div id="longitude-group" class="form-group" ng-class="{ 'has-error' : errorLongitude }">
+					<label class="control-label" for="id_longitude">longitude</label> 
+					<input type="text" id="id_longitude" name="longitude" ng-model="formData.longitude" maxlength="25" class="form-control"/>
+					<span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span> 
+				  </div>
+
+			  	  <div id="externalurl-group" class="form-group" ng-class="{ 'has-error' : errorExternalurl }">
+					<label class="control-label" for="id_externalurl">externalurl</label> 
+					<input type="text" id="id_externalurl" name="externalurl" ng-model="formData.externalurl" maxlength="25" class="form-control"/>
+					<span class="help-block" ng-show="errorExternalurl">{{ errorExternalurl }}</span> 
+				  </div>
+
+				  <button type="submit" class="btn btn-primary">
+      				 Save Marker
+  					</button>
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button
+				</form>
+			  </div>
+
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default"
+				data-dismiss="modal">Close</button>
+			  </div>
+			  
+			</div>
+		  </div>
+		</div>
+		<button id="add-location" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Add Marker (+)</button>
+	</div>
+</body>
+{% endverbatim %}
+{% endblock body %}
+

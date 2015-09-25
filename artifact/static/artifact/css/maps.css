@@ -1,0 +1,40 @@
+.map-block { 
+	padding: 1em;
+	margin: .2em;
+	height: 225px;
+	width: 133;
+	border: thin solid lightgrey;
+	float: left;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.form-field {
+	padding: .5em;
+}
+
+.map-image { 
+	float:left; 
+}
+
+.image-title { 
+	clear: left;
+}
+
+#add-location-container {
+	position:relative;
+}
+
+#add-location { 
+	float: left; 
+	clear: left; 
+	position: absolute;
+	bottom: 0.5em;
+	right: 0.7em;
+}
+
+.artifact {
+	width: 100%;
+}

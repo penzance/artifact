@@ -1,0 +1,81 @@
+[
+    {
+        "fields": {
+            "date_modified": "2015-09-12T03:26:23.222Z",
+            "modified_by": "20533064",
+            "title": "Australia (satellite)",
+            "created_by": "20533064",
+            "zoom": 3,
+            "longitude": "131.044922",
+            "maptype": 2,
+            "latitude": "-25.363882",
+            "date_created": "2015-09-12T03:26:23.222Z",
+            "canvas_course_id": 1
+        },
+        "model": "artifact.map",
+        "pk": 2
+    },{
+        "fields": {
+            "date_modified": "2015-09-12T03:26:23.222Z",
+            "modified_by": "20533064",
+            "title": "Barcelona, Spain",
+            "created_by": "20533064",
+            "zoom": 3,
+            "longitude": "2.1487679",
+            "maptype": 2,
+            "latitude": "41.39479",
+            "date_created": "2015-09-12T03:26:23.222Z",
+            "canvas_course_id": 1
+        },
+        "model": "artifact.map",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "date_modified": "2015-09-12T04:03:22.197Z",
+            "modified_by": "20533064",
+            "title": "Ayer's Rock Site",
+            "created_by": "20533064",
+            "zoom": 12,
+            "longitude": "131.035904",
+            "maptype": 2,
+            "latitude": "-25.344646",
+            "date_created": "2015-09-12T04:03:22.197Z",
+            "canvas_course_id": 1
+        },
+        "model": "artifact.map",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "map": 4,
+            "modified_by": "20533064",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida erat et faucibus hendrerit. Etiam nec feugiat nisi. In fringilla aliquet gravida. Vestibulum in luctus justo. In eu nibh sit amet dui egestas malesuada. Duis mollis orci vel justo pretium, ut iaculis nunc suscipit. Suspendisse elementum et tortor sit amet mattis. Phasellus ac elit quis nulla consectetur porttitor eu eget eros. Morbi tristique viverra augue sit amet faucibus. Ut vitae ex vulputate, accumsan nunc eget, convallis justo. In hac habitasse platea dictumst. Nam quis orci consequat, laoreet turpis id, mattis dolor.Duis ut nunc nisi. Sed facilisis libero at enim fermentum tincidunt. Morbi pharetra convallis enim ut semper. Aliquam pretium, risus ac molestie tempus, sapien tellus suscipit nulla, ac pharetra augue nisi at sem. Vivamus pretium vitae neque vel pellentesque. ",
+            "title": "Ayer's Rock",
+            "date_modified": "2015-09-12T05:10:30.559Z",
+            "longitude": "131.035904",
+            "created_by": "20533064",
+            "latitude": "-25.344646",
+            "date_created": "2015-09-12T05:10:30.559Z",
+            "external_url": "http://www.google.com"
+        },
+        "model": "artifact.markers",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "map": 4,
+            "modified_by": "20533064",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida erat et faucibus hendrerit. Etiam nec feugiat nisi. In fringilla aliquet gravida. Vestibulum in luctus justo. In eu nibh sit amet dui egestas malesuada. Duis mollis orci vel justo pretium, ut iaculis nunc suscipit. Suspendisse elementum et tortor sit amet mattis. Phasellus ac elit quis nulla consectetur porttitor eu eget eros. Morbi tristique viverra augue sit amet faucibus. Ut vitae ex vulputate, accumsan nunc eget, convallis justo. In hac habitasse platea dictumst. Nam quis orci consequat, laoreet turpis id, mattis dolor.Duis ut nunc nisi. Sed facilisis libero at enim fermentum tincidunt. Morbi pharetra convallis enim ut semper. Aliquam pretium, risus ac molestie tempus, sapien tellus suscipit nulla, ac pharetra augue nisi at sem. Vivamus pretium vitae neque vel pellentesque. Praesent tincidunt fermentum dignissim. Pellentesque blandit tellus quis sapien convallis, non gravida mi aliquet. Etiam sodales laoreet neque ut hendrerit. Sed ac porta nulla, ut aliquam erat.Proin id massa interdum, eleifend tellus eget, malesuada augue. Maecenas eu euismod nulla. Vivamus tempor mi et auctor venenatis. Curabitur lobortis lacus ipsum, ut placerat mauris placerat sit amet. In in turpis non ante vulputate vehicula at quis ante. Duis congue risus eros, et cursus orci interdum quis. Donec tempor lacinia sem, at placerat nisl interdum dignissim. Morbi in augue ipsum. Nam rhoncus erat metus, molestie condimentum felis bibendum non. Praesent dapibus commodo ligula in faucibus.",
+            "title": "South of Ayer's Rock",
+            "date_modified": "2015-09-12T05:10:30.559Z",
+            "longitude": "131.045651",
+            "created_by": "20533064",
+            "latitude": "-25.351969",
+            "date_created": "2015-09-12T05:10:30.559Z",
+            "external_url": "http://www.google.com"
+        },
+        "model": "artifact.markers",
+        "pk": 3
+    }
+]
