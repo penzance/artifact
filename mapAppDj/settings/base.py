@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': SECURE_SETTINGS.get('db_default_name', 'mapAppDj'),
         'USER': SECURE_SETTINGS.get('db_default_user', 'postgres'),
-        'PASSWORD': SECURE_SETTINGS.get('db_default_password'),
+        'PASSWORD': SECURE_SETTINGS.get('db_default_password', 'password'),
         'HOST': SECURE_SETTINGS.get('db_default_host', '127.0.0.1'),
         'PORT': SECURE_SETTINGS.get('db_default_port', 5432),  # Default postgres port
     },

@@ -13,7 +13,7 @@ class Map(models.Model):
     MAP_TYPE_CHOICES = (
         (SATELLITE, 'SATELLITE'),
         (ROADMAP, 'ROADMAP'),
-        (HYBRID, 'HYBRID'),
+        (HYBRID, 'HYBRID'),8
         (TERRAIN, 'TERRAIN'),
     )
 
