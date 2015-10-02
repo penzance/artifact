@@ -3,8 +3,7 @@
 	//Angular App Module and Controller
 	angular.module('app').controller('LocationController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
 
-		//var GET_LOC = $djangoUrl.reverse('artifact:map_location', [window.globals.MAP_ID]);
-		var GET_LOC = '/artifact/api/v1/location/4'; //+window.globals.MAP_ID
+		var GET_LOC = '/artifact/api/v1/location/'+$scope.map_id;
 		var responsePromise = $http.get(GET_LOC);
 
 		responsePromise.success(function(data, status, headers, config) {
