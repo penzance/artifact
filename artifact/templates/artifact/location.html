@@ -8,9 +8,6 @@
 
 
 {% block js %}
- 	<script>
-        window.globals.MAP_ID = {{map_id}};
-    </script>
     <script src="//maps.googleapis.com/maps/api/js" type="text/javascript"></script>
     <script src="{% static 'artifact/js/angularapp.js' %}" type="text/javascript"></script>
     <script src="{% static 'artifact/js/controllers/location_controller.js' %}" type="text/javascript"></script>
@@ -18,10 +15,12 @@
 
 {% block body %}
 
+
+<body  ng-app="app" ng-init="map_id={{map_id}}">
 {% verbatim %}
-<body  ng-app="app">
 	<div class="container" ng-controller="LocationController">
-	
+
+
 		<div class="row">
 			<div class="col-xs-12 col-md-8">
 				<h1>{{maptitle}}</h1>
@@ -109,7 +108,8 @@
 		</div>
 		<button id="add-location" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Add Marker (+)</button>
 	</div>
-</body>
 {% endverbatim %}
+</body>
+
 {% endblock body %}
 

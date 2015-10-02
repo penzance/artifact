@@ -4,9 +4,7 @@
    */
   angular.module('app').controller('AddNewMapController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
 
-    //var GET_MAPS = $djangoUrl.reverse('artifact:maps', [window.globals.CANVAS_COURSE_ID]);
-
-    var GET_MAPS = 'api/v1/maps/1'; //+window.globals.CANVAS_COURSE_ID
+    var GET_MAPS = 'api/v1/maps/'+$scope.canvas_course_id;
 
     var responsePromise = $http.get(GET_MAPS);
 
