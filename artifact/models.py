@@ -13,7 +13,7 @@ class Map(models.Model):
     MAP_TYPE_CHOICES = (
         (SATELLITE, 'SATELLITE'),
         (ROADMAP, 'ROADMAP'),
-        (HYBRID, 'HYBRID'),8
+        (HYBRID, 'HYBRID'),
         (TERRAIN, 'TERRAIN'),
     )
 
@@ -43,7 +43,6 @@ class Map(models.Model):
 
 
 class Markers(models.Model):
-
     title = models.CharField(max_length=250)
     map = models.ForeignKey(Map, related_name='markers')
     latitude = models.CharField(max_length=32)

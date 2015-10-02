@@ -3,9 +3,9 @@
 	//Angular App Module and Controller
 	angular.module('app').controller('LocationController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
 
-		var GET_LOC = '/artifact/api/v1/location/'+$scope.map_id;
-		var responsePromise = $http.get(GET_LOC);
+		var GET_LOC = $djangoUrl.reverse('artifact:map_location', [$scope.map_id]);
 
+		var responsePromise = $http.get(GET_LOC);
 		responsePromise.success(function(data, status, headers, config) {
 
       var mapOptions = {
@@ -28,7 +28,7 @@
 					break;
 			}
 
-			$scope.maptitle = data.title;
+	$scope.maptitle = data.title;
       $scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
       $scope.markers = [];
 
@@ -65,6 +65,37 @@
 			}
 
 		});
+    $scope.formData = {};
+
+    var param = function (data) {
+      var returnString = '';
+      for (d in data) {
+        if (data.hasOwnProperty(d)) {
+          returnString += d + '=' + data[d] + '&';
+        }
+      }
+      // Remove last ampersand and return
+      return returnString.slice(0, returnString.length - 1);
+    };
+
+    $scope.processForm = function () {
+      console.log($scope.formData);
+      $http({
+        method: 'POST',
+        url: 'api/v1/location/' + $scope.map_id,
+        data: param($scope.formData), // pass in data as strings
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
+      }).then(function (data) {
+        $scope.markers.push({
+          'title': data.title,
+          'latitude': data.latitude,
+          'longitude': data.longitude,
+          'description': data.description,
+          'external_url': data.external_url
+        });
+      });
+              console.log(data.title)
+    };
 
   }]);
 
