@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 @login_required
 @api_view(['GET', 'POST'])
 def map_collection(request, canvas_course_id):
+    logger.debug('here')
     if request.method == 'GET':
         maps = Map.objects.filter(canvas_course_id=canvas_course_id)
         serializer = MapSerializer(maps, many=True)
@@ -55,11 +56,14 @@ def map_location(request, map_id):
 @login_required
 @api_view(['GET', 'POST'])
 def marker_collection(request, map_id):
+    logger.debug('HERE')
     if request.method == 'GET':
         maps = Markers.objects.filter(map_id=map_id)
         serializer = MarkersSerializer(maps, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        logger.debug("ASDFJKL")
+        logger.debug('%s' % request.data);
         logged_in_user_id = request.LTI['lis_person_sourcedid']
         data = {'title': request.data.get('title'),
                 'map': map_id,
@@ -67,11 +71,13 @@ def marker_collection(request, map_id):
                 'longitude': request.data.get('longitude'),
                 'description': request.data.get('description'),
                 'external_url': request.data.get('external_url'),
-                'date_modified': timezone.now(),
+                'fileupload': request.data.get('fileupload'),
                 'created_by': logged_in_user_id,
                 'modified_by': logged_in_user_id,
+                'date_created': timezone.now(),
+                'date_modified': timezone.now(),
                 }
-        serializer = MapSerializer(data=data)
+        serializer = MarkersSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

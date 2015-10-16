@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.core import files
 
 
 class Map(models.Model):
@@ -53,6 +54,7 @@ class Markers(models.Model):
     modified_by = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
+    file = models.FileField(blank=True)
 
     class Meta:
         db_table = 'mp_markers'

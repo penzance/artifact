@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 @login_required
 @require_http_methods(['GET'])
 def map_index(request):
-    logger.debug('******** MapList ********')
+    logger.warning('******** MapList ********')
     for k,v in request.LTI.items():
         logger.debug('%s : %s' % (k,v))
     logger.debug('******** EndMapList ********')
