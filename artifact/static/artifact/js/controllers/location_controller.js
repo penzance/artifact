@@ -2,9 +2,8 @@
 
 	//Angular App Module and Controller
 	angular.module('app').controller('LocationController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
-
 		var GET_LOC = $djangoUrl.reverse('artifact:map_location', [$scope.map_id]);
-
+		var GET_MARKERS= $djangoUrl.reverse('artifact:markers', [$scope.map_id]);
 		var responsePromise = $http.get(GET_LOC);
 		responsePromise.success(function(data, status, headers, config) {
 			var mapOptions = {
@@ -61,49 +60,44 @@
 
 			});
     	$scope.formData = {};
-    	var param = function (data) {
-      		var returnString = '';
-      		for (d in data) {
-        		if (data.hasOwnProperty(d)) {
-          			returnString += d + '=' + data[d] + '&';
-        			}
-      			}
-      // Remove last ampersand and return
-      return returnString.slice(0, returnString.length - 1);
-    };
+    // 	var param = function (data) {
+    //   		var returnString = '';
+    //   		for (d in data) {
+    //     		if (data.hasOwnProperty(d)) {
+    //       			returnString += d + '=' + data[d] + '&';
+    //     			}
+    //   			}
+    //   // Remove last ampersand and return
+    //   return returnString.slice(0, returnString.length - 1);
+    // };
 
     $scope.processForm = function () {
       console.log($scope.formData);
-      console.log($scope.formData.title);
-      console.log("TESTTESTTEST");
-      console.log(formData.title);
       $http({
         method: 'POST',
-        url: 'api/v1/location/' + $scope.map_id,
-        data: param($scope.formData), // pass in data as strings
+        url: GET_MARKERS,
+        data: $.param($scope.formData),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
-      }).then(function (data) {
-        $scope.markers.push({
-          'title': formData.title,
-          'latitude': formData.latitude,
-          'longitude': formData.longitude,
-          'description': formData.description,
-          'external_url': formData.external_url,
-          // 'fileupload': formData.fileupload,
-        });
-      });
+      }).then($scope.markers.push({
+          'title': $scope.formData.title,
+          'latitude': $scope.formData.latitude,
+          'longitude': $scope.formData.longitude,
+          'description': $scope.formData.description,
+          'external_url': $scope.formData.externalurl,
+          'fileupload': $scope.formData.fileupload,
+        }));
     	console.log($scope.markers)
     };
-    $scope.add = function(){
-      var f = document.getElementById('id_fileupload').files[0],
-      r = new FileReader();
-      r.onloadend = function(e){
-        var data = e.target.result;
-        // console.log(data)
-        //send you binary data via $http or $resource or do anything else with it
-      }
-      r.readAsBinaryString(f);
-    };
+    // $scope.add = function(){
+    //   var f = document.getElementById('id_fileupload').files[0],
+    //   r = new FileReader();
+    //   r.onloadend = function(e){
+    //     var data = e.target.result;
+    //     // console.log(data)
+    //     //send you binary data via $http or $resource or do anything else with it
+    //   }
+    //   r.readAsBinaryString(f);
+    // };
   }]);
 
 })();
