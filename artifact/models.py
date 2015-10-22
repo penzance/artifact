@@ -54,7 +54,6 @@ class Markers(models.Model):
     modified_by = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
-    file = models.FileField(blank=True)
 
     class Meta:
         db_table = 'mp_markers'
