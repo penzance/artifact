@@ -28,53 +28,54 @@
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Modal Header</h4>
+				<h4 class="modal-title">Create a new map view</h4>
 			  </div>
 
 			  <div class="modal-body">
 				<form ng-submit="processForm()">
 				  
 				  <div id="title-group" class="form-group" ng-class="{ 'has-error' : errorTitle }">
-				  	<label class="control-label requiredField" for="id_title">Enter the title of this view</label>
-				  	<input type="text" name="title" ng-model="formData.title" maxlength="50" id="id_title" class="form-control" />
+				  	<label class="control-label requiredField" for="id_title">Enter the title of this view (Required)
+				  	</label>
+				  	<input type="text" name="title" ng-model="formData.title" maxlength="50" id="id_title" class="form-control" required>
 				  	<span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span> 
 				  </div>
 				  
 				  <div id="description-group" class="form-group" ng-class="{ 'has-error' : errorDescription }">
-				  	<label class="control-label requiredField" for="id_description">Enter a description for this view</label>
-				  	<textarea name="description" ng-model="formData.description" id="id_description" class="form-control" cols="30" rows="10"></textarea>	  	
+				  	<label class="control-label requiredField" for="id_description">Enter a description for this view (Required)</label>
+				  	<textarea name="description" ng-model="formData.description" id="id_description" class="form-control" cols="30" rows="10" required></textarea>	  	
 				  	<span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span> 
 				  </div>
 				  
 				  <div id="url-group" class="form-group" ng-class="{ 'has-error' : errorUrl }">
-					<label class="control-label" for="id_url">Add the Google Map URL</label> 
-					<input type="text" id="id_url" name="url" ng-model="formData.url" maxlength="250" class="form-control"/>
+					<label class="control-label" for="id_url">Add the Google Map URL (Required)</label> 
+					<input type="text" id="id_url" name="url" ng-model="formData.url" maxlength="250" class="form-control" required>
 					<span class="help-block" ng-show="errorUrl">{{ errorUrl }}</span> 
 				  </div>
 
 					<div id="latitude-group" class="form-group" ng-class="{ 'has-error' : errorLatitude }">
-					<label class="control-label" for="id_latitude">Latitude</label>
-					<input type="text" id="id_latitude" name="url" ng-model="formData.latitude" maxlength="250" class="form-control"/>
+					<label class="control-label" for="id_latitude">Latitude (Required)</label>
+					<input type="text" id="id_latitude" name="url" ng-model="formData.latitude" maxlength="250" class="form-control" required>
 					<span class="help-block" ng-show="errorLatitude">{{ errorLatitude }}</span>
 				  </div>
 
 					<div id="longitude-group" class="form-group" ng-class="{ 'has-error' : errorLongitude }">
-					<label class="control-label" for="id_longitude">Longitude</label>
-					<input type="text" id="id_longitude" name="url" ng-model="formData.longitude" maxlength="250" class="form-control"/>
+					<label class="control-label" for="id_longitude">Longitude (Required)</label>
+					<input type="text" id="id_longitude" name="url" ng-model="formData.longitude" maxlength="250" class="form-control" required>
 					<span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span>
 				  </div>
 
 					<div id="zoomid-group" class="form-group" ng-class="{ 'has-error' : errorZoom }">
-					<label class="control-label form-control" for="id_zoom">Select a default map zoom</label>
-					<select id="id_zoom" name="zoom" ng-model="formData.zoom">
+					<label class="control-label form-control" for="id_zoom">Select a default map zoom (Required)</label>
+					<select id="id_zoom" name="zoom" ng-model="formData.zoom" required>
 						<option value="{{i}}" ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]">{{i}}</option>
 					</select>
 					<span class="help-block" ng-show="errorZoom">{{ errorZoom }}</span>
 				  </div>
 
 				  <div id="maptypeid-group" class="form-group" ng-class="{ 'has-error' : errorMapTypeId }">
-					<label class="control-label form-control" for="id_MapType">Select a default map view</label>
-					<select id="id_MapType" name="maptype" ng-model="formData.maptype">
+					<label class="control-label form-control" for="id_MapType">Select a default map view (Reqiured)</label>
+					<select id="id_MapType" name="maptype" ng-model="formData.maptype" required>
 						<option value="1">SATELLITE</option>
 					  	<option value="2">ROADMAP</option>
 					  	<option value="3">HYBRID</option>

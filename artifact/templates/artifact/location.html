@@ -55,50 +55,43 @@
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Modal Header</h4>
+				<h4 class="modal-title">Add a new point to the map</h4>
 			  </div>
 
 			  <div class="modal-body">
-				<form ng-submit="processForm()">
+				<form ng-submit="processForm()" id="form1">
 				  
 				  <div id="title-group" class="form-group" ng-class="{ 'has-error' : errorTitle }">
-				  	<label class="control-label requiredField" for="id_title">Enter the title</label>
-				  	<input type="text" name="title" ng-model="formData.title" maxlength="50" id="id_title" class="form-control" />
+				  	<label class="control-label requiredField" for="id_title">Enter the title (Required)</label>
+				  	<input type="text" name="title" ng-model="formData.title" maxlength="50" id="id_title" class="form-control" required>
 				  	<span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span> 
 				  </div>
 				  
 				  <div id="description-group" class="form-group" ng-class="{ 'has-error' : errorDescription }">
-				  	<label class="control-label requiredField" for="id_description">Enter a description</label>
-				  	<textarea name="description" ng-model="formData.description" id="id_description" class="form-control" cols="30" rows="10"></textarea>	  	
+				  	<label class="control-label requiredField" for="id_description">Enter a description (Required)</label>
+				  	<textarea name="description" ng-model="formData.description" id="id_description" class="form-control" cols="30" rows="10" required></textarea>	  	
 				  	<span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span> 
 				  </div>
 				  
 				  <div id="latitude-group" class="form-group" ng-class="{ 'has-error' : errorlatitude }">
-					<label class="control-label" for="id_latitude">latitude</label> 
-					<input type="text" id="id_latitude" name="latitude" ng-model="formData.latitude" maxlength="25" class="form-control"/>
+					<label class="control-label" for="id_latitude">Latitude (Required)</label> 
+					<input type="text" id="id_latitude" name="latitude" ng-model="formData.latitude" maxlength="25" class="form-control" required>
 					<span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span> 
 				  </div>
 				  
 				  <div id="longitude-group" class="form-group" ng-class="{ 'has-error' : errorLongitude }">
-					<label class="control-label" for="id_longitude">longitude</label> 
-					<input type="text" id="id_longitude" name="longitude" ng-model="formData.longitude" maxlength="25" class="form-control"/>
+					<label class="control-label" for="id_longitude">Longitude (Required)</label> 
+					<input type="text" id="id_longitude" name="longitude" ng-model="formData.longitude" maxlength="25" class="form-control" required>
 					<span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span> 
 				  </div>
 
 			  	  <div id="externalurl-group" class="form-group" ng-class="{ 'has-error' : errorExternalurl }">
-					<label class="control-label" for="id_externalurl">externalurl</label> 
-					<input type="text" id="id_externalurl" name="externalurl" ng-model="formData.externalurl" maxlength="250" class="form-control"/>
+					<label class="control-label" for="id_externalurl">External URL</label> 
+					<input type="text" id="id_externalurl" name="externalurl" ng-model="formData.externalurl" maxlength="250" class="form-control">
 					<span class="help-block" ng-show="errorExternalurl">{{ errorExternalurl }}</span> 
 				  </div>
 
-				  	<div id="fileupload-group" class="form-group" ng-class="{ 'has-error' : errorFileupload }">
-					<label class="control-label" for="id_fileupload">File Upload</label>
-					<input type="file" id="id_fileupload" name="fileupload" ng-model="formData.fileupload" class="form-control"/>
-					<button ng-click="add()">Add</button>
-					<span class="help-block" ng-show="errorExternalurl">{{ errorFileUpload }}</span> 
-				  </div>
-
-				  <button type="submit" class="btn btn-primary">
+				  <button type="submit" class="btn btn-primary" form="form1">
       				 Save Marker
   					</button>
 				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button
@@ -113,7 +106,44 @@
 			</div>
 		  </div>
 		</div>
+
+
+		<!-- Add multiple points modal -->
+		<div class="modal fade" id="addlist" role="dialog">
+			<div class="modal-dialog">
+			<!-- Modal content-->
+				<div class="modal-content">
+			  		<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Add a list of points to the map</h4>
+			  		</div>
+
+			  		<div class="modal-body">
+			  		You can use this form to upload a list of points in a CSV file. Use this particular file format: (add file format here.)<br><br>
+			  		<form enctype="multipart/form-data">
+			  		<input id="fileUpload" type="file" name="fileUpload" file-model="myFile"/><br>
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</form>
+				<button type="submit" class="btn btn-primary" ng-click="processAddPoints()">
+      				Save Marker
+  				</button>
+			  </div>
+
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default"
+				data-dismiss="modal">Close</button>
+			  </div>
+			  		</form>
+			  		</div>
+			  	</div>
+			</div>
+		</div>
+
+
+
+
 		<button id="add-location" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Add Marker (+)</button>
+		<button id="add-list" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addlist">Add List of Markers (+)</button>	
 	</div>
 {% endverbatim %}
 </body>
