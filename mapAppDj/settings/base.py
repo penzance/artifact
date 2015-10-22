@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = SECURE_SETTINGS.get('django_secret_key', 'changeme')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = SECURE_SETTINGS.get('enable_debug', False)
+DEBUG = SECURE_SETTINGS.get('enable_debug', True)
 
 # Application definition
 
@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': SECURE_SETTINGS.get('db_default_name', 'mapAppDj'),
         'USER': SECURE_SETTINGS.get('db_default_user', 'postgres'),
-        'PASSWORD': SECURE_SETTINGS.get('db_default_password'),
+        'PASSWORD': SECURE_SETTINGS.get('db_default_password', 'password'),
         'HOST': SECURE_SETTINGS.get('db_default_host', '127.0.0.1'),
         'PORT': SECURE_SETTINGS.get('db_default_port', 5432),  # Default postgres port
     },
@@ -156,11 +156,11 @@ _LOG_ROOT = SECURE_SETTINGS.get('log_root', '')  # Default to current directory
 
 # Turn off default Django logging
 # https://docs.djangoproject.com/en/1.8/topics/logging/#disabling-logging-configuration
-LOGGING_CONFIG = None
+# LOGGING_CONFIG = None
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s\t%(asctime)s.%(msecs)03dZ\t%(name)s:%(lineno)s\t%(message)s',
@@ -170,42 +170,39 @@ LOGGING = {
             'format': '%(levelname)s\t%(name)s:%(lineno)s\t%(message)s',
         }
     },
-    # Borrowing some default filters for app loggers
     'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
-    },
-    # This is the default logger for any apps or libraries that use the logger
-    # package, but are not represented in the `loggers` dict below.  A level
-    # must be set and handlers defined.  Setting this logger is equivalent to
-    # setting and empty string logger in the loggers dict below, but the separation
-    # here is a bit more explicit.  See link for more details:
-    # https://docs.python.org/2.7/library/logging.config.html#dictionary-schema-details
-    'root': {
-        'level': logging.WARNING,
-        'handlers': ['console', 'app_logfile'],
     },
     'handlers': {
         # Log to a text file that can be rotated by logrotate
         'app_logfile': {
             'level': _DEFAULT_LOG_LEVEL,
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': os.path.join(_LOG_ROOT, 'django-mapAppDj.log'),
+            'filename': os.path.join(_LOG_ROOT, 'django-icommons_lti_tools.log'),
+            'formatter': 'verbose',
+        },
+        'manage_people_audit_log_file': {
+            'level': _DEFAULT_LOG_LEVEL,
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': os.path.join(_LOG_ROOT, 'django-manage_people_audit.log'),
             'formatter': 'verbose',
         },
         'console': {
-            'level': logging.DEBUG,
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
             'filters': ['require_debug_true'],
         },
     },
     'loggers': {
-        # TODO: remove this catch-all handler in favor of app-specific handlers
         '': {
             'handlers': ['console', 'app_logfile'],
-            'level': _DEFAULT_LOG_LEVEL,
+            'level': 'DEBUG',
         },
         'django.request': {
             'handlers': ['console', 'app_logfile'],
@@ -213,18 +210,18 @@ LOGGING = {
             'propagate': False,
         },
         'django': {
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'py.warnings': {
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'artifact': {
-            'level': _DEFAULT_LOG_LEVEL,
             'handlers': ['console', 'app_logfile'],
+            'level': 'DEBUG',
             'propagate': False,
         },
+
+
+        'artifact': {
+            'handlers': ['console', 'app_logfile'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+       
     }
 }
 
