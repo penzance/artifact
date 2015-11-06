@@ -4,13 +4,30 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import HttpResponse
 
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from artifact.models import Map, Markers
 from artifact.serializers import MapSerializer, MarkersSerializer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+# from snippets.models import Snippet
+# from snippets.serializers import SnippetSerializer
+import csv
 
 logger = logging.getLogger(__name__)
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
 
 
 @login_required
@@ -91,12 +108,35 @@ def marker_collection(request, map_id):
 @login_required
 @api_view(['GET','POST'])
 def csv_points(request, map_id):
-    logger.debug("PRINT REQUEST FILES")
-    logger.debug('%s' % request.FILES);
-    file = request.FILES['fileUpload']
-    data = [row for row in csv.reader(file.read().splitlines())]
-    logger.debug("PRINT Contents of CSV file")
-    logger.debug(data)
+    requeststring = request.data[u' filename'].splitlines()
+    logged_in_user_id = request.user.username
+    errors = []
+    for row in requeststring[4:-1]:
+        items = row.split(",")
+        data = {'title': items[0],
+                'map': map_id,
+                'latitude': items[2],
+                'longitude': items[3],
+                'description': items[1],
+                'external_url': items[4],
+                'created_by': logged_in_user_id,
+                'modified_by': logged_in_user_id,
+                'date_created': timezone.now(),
+                'date_modified': timezone.now(),
+                }
+        serializer = MarkersSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            # return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            #logger.debug(serializer.errors)
+            #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            errors.append(serializer.errors)
+    if len(errors) != 0:
+        return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     # # logged_in_user_id = request.LTI['lis_person_sourcedid']
     # logged_in_user_id = request.user.username
     # data = {'title': request.data.get('title'),
