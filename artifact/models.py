@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.core import files
 
 
 class Map(models.Model):
@@ -43,7 +44,6 @@ class Map(models.Model):
 
 
 class Markers(models.Model):
-
     title = models.CharField(max_length=250)
     map = models.ForeignKey(Map, related_name='markers')
     latitude = models.CharField(max_length=32)
