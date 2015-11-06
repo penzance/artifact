@@ -88,18 +88,46 @@
           'external_url': $scope.formData.externalurl,
           'fileupload': $scope.formData.fileupload,
         }));
-    	console.log($scope.markers)
-    	$('#myModal').modal('hide')
+    	console.log($scope.markers);
+    	$('#myModal').modal('hide');
     };
-
-    $scope.processAddPoints = function () {
-      console.log($scope.formData);
-      $http({
-        method: 'POST',
-        url: GET_CSV,
-        data: $.param($scope.formData),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
+    $scope.uploadFile = function(){
+        var file = $scope.myFile;
+        console.log('file is ' );
+        console.dir(file);
+        var uploadUrl = GET_CSV;
+        var fd = new FormData();
+        fd.append('file', file);
+        $http({
+        	method: 'POST',
+        	url: GET_CSV,
+        	data: fd,
+        	headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
       }).then($('#addlist').modal('hide'))
     };
-  }]);
+
+    // $scope.processAddPoints = function () {
+    //   console.log($scope.formData);
+    //   $http({
+    //     method: 'POST',
+    //     url: GET_CSV,
+    //     data: $scope.formData,
+    //     headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
+    //   }).then($('#addlist').modal('hide'))
+    // };
+  }])
+// .service('fileUpload', ['$http', function ($http) {
+//     this.uploadFileToUrl = function(file, uploadUrl){
+//         var fd = new FormData();
+//         fd.append('file', file);
+//         $http.post(uploadUrl, fd, {
+//             transformRequest: angular.identity,
+//             headers: {'Content-Type': undefined}
+//         })
+//         .success(function(){
+//         })
+//         .error(function(){
+//         });
+//     }
+// }]);
 })();

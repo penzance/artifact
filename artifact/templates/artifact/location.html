@@ -121,11 +121,11 @@
 			  		<div class="modal-body">
 			  		You can use this form to upload a list of points in a CSV file. Use this particular file format: (add file format here.)<br><br>
 			  		<form enctype="multipart/form-data">
-			  		<input id="fileUpload" type="file" name="fileUpload" file-model="myFile"/><br>
+			  		<input type="file" file-model="myFile"/><br>
 				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</form>
-				<button type="submit" class="btn btn-primary" ng-click="processAddPoints()">
-      				Save Marker
+				<button type="submit" class="btn btn-primary" ng-click="uploadFile()">
+      				Save Markers
   				</button>
 			  </div>
 
