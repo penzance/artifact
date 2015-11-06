@@ -2,8 +2,10 @@
 
 	//Angular App Module and Controller
 	angular.module('app').controller('LocationController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
+		var mc = this;
 		var GET_LOC = $djangoUrl.reverse('artifact:map_location', [$scope.map_id]);
 		var GET_MARKERS= $djangoUrl.reverse('artifact:markers', [$scope.map_id]);
+		var GET_CSV= $djangoUrl.reverse('artifact:csv_points', [$scope.map_id]);
 		var responsePromise = $http.get(GET_LOC);
 		responsePromise.success(function(data, status, headers, config) {
 			var mapOptions = {
@@ -86,18 +88,46 @@
           'external_url': $scope.formData.externalurl,
           'fileupload': $scope.formData.fileupload,
         }));
-    	console.log($scope.markers)
+    	console.log($scope.markers);
+    	$('#myModal').modal('hide');
     };
-    // $scope.add = function(){
-    //   var f = document.getElementById('id_fileupload').files[0],
-    //   r = new FileReader();
-    //   r.onloadend = function(e){
-    //     var data = e.target.result;
-    //     // console.log(data)
-    //     //send you binary data via $http or $resource or do anything else with it
-    //   }
-    //   r.readAsBinaryString(f);
-    // };
-  }]);
+    $scope.uploadFile = function(){
+        var file = $scope.myFile;
+        console.log('file is ' );
+        console.dir(file);
+        var uploadUrl = GET_CSV;
+        var fd = new FormData();
+        fd.append('file', file);
+        $http({
+        	method: 'POST',
+        	url: GET_CSV,
+        	data: fd,
+        	headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
+      }).then($('#addlist').modal('hide'))
+    };
 
+    // $scope.processAddPoints = function () {
+    //   console.log($scope.formData);
+    //   $http({
+    //     method: 'POST',
+    //     url: GET_CSV,
+    //     data: $scope.formData,
+    //     headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
+    //   }).then($('#addlist').modal('hide'))
+    // };
+  }])
+// .service('fileUpload', ['$http', function ($http) {
+//     this.uploadFileToUrl = function(file, uploadUrl){
+//         var fd = new FormData();
+//         fd.append('file', file);
+//         $http.post(uploadUrl, fd, {
+//             transformRequest: angular.identity,
+//             headers: {'Content-Type': undefined}
+//         })
+//         .success(function(){
+//         })
+//         .error(function(){
+//         });
+//     }
+// }]);
 })();

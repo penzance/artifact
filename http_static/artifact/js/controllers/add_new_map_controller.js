@@ -3,10 +3,8 @@
    Angular controller
    */
   angular.module('app').controller('AddNewMapController', ['$scope', '$http', '$timeout', 'djangoUrl', function ($scope, $http, $timeout, $djangoUrl) {
+    var GET_MAPS = $djangoUrl.reverse('artifact:maps', [$scope.canvas_course_id]);
 
-    //var GET_MAPS = $djangoUrl.reverse('artifact:maps', [window.globals.CANVAS_COURSE_ID]);
-
-    var GET_MAPS = 'api/v1/maps/1'; //+window.globals.CANVAS_COURSE_ID
 
     var responsePromise = $http.get(GET_MAPS);
 
@@ -32,20 +30,21 @@
       console.log($scope.formData);
       $http({
         method: 'POST',
-        url: 'api/v1/maps/1',
+        url: GET_MAPS, //'api/v1/maps/1',
         data: param($scope.formData), // pass in data as strings
         headers: {'Content-Type': 'application/x-www-form-urlencoded'} // set the headers so angular passing info as form data (not request payload)
       }).then(function (data) {
+        console.log(data);
         $scope.maps.push({
-          'id': 7,
           'title': data.title,
           'latitude': data.latitude,
           'longitude': data.longitude,
           'zoom': parseInt(data.zoom),
-          'maptype': 1,
+          'maptype': data.maptype,
           'markers': []
         });
       });
+      $('#myModal').modal('hide')
     };
   }]);
 })();

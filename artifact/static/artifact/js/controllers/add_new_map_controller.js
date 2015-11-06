@@ -44,6 +44,7 @@
           'markers': []
         });
       });
+      $('#myModal').modal('hide')
     };
   }]);
 })();
