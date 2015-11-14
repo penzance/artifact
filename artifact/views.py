@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
+from models import Map, Markers
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 @login_required
 @require_http_methods(['GET'])
 def map_index(request):
-    logger.debug('******** MapList ********')
+    logger.warning('******** MapList ********')
     for k,v in request.LTI.items():
         logger.debug('%s : %s' % (k,v))
     logger.debug('******** EndMapList ********')
