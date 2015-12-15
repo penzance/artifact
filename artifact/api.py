@@ -15,6 +15,10 @@ from rest_framework.parsers import JSONParser
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 import csv
+import urllib
+import urllib2
+import urlparse
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -83,27 +87,82 @@ def marker_collection(request, map_id):
         logger.debug('%s' % request.data);
         # logged_in_user_id = request.LTI['lis_person_sourcedid']
         logged_in_user_id = request.user.username
-        data = {'title': request.data.get('title'),
-                'map': map_id,
-                'latitude': request.data.get('latitude'),
-                'longitude': request.data.get('longitude'),
-                'description': request.data.get('description'),
-                'external_url': request.data.get('externalurl'),
-                'fileupload': request.data.get('fileupload'),
-                'created_by': logged_in_user_id,
-                'modified_by': logged_in_user_id,
-                'date_created': timezone.now(),
-                'date_modified': timezone.now(),
-                }
-        logger.debug("PRINT DATA")
-        logger.debug(data)
-        serializer = MarkersSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        latitude = request.data.get('latitude')
+        longitude = request.data.get('longitude')
+        address = request.data.get('address')
+        logger.debug(address)
+        logger.debug(latitude)
+        logger.debug(longitude)
+        if latitude is not None and longitude is not None:
+            data = {'title': request.data.get('title'),
+                    'map': map_id,
+                    'latitude': request.data.get('latitude'),
+                    'longitude': request.data.get('longitude'),
+                    'description': request.data.get('description'),
+                    'external_url': request.data.get('externalurl'),
+                    'fileupload': request.data.get('fileupload'),
+                    'created_by': logged_in_user_id,
+                    'modified_by': logged_in_user_id,
+                    'date_created': timezone.now(),
+                    'date_modified': timezone.now(),
+                    }
+            logger.debug("PRINT DATA")
+            logger.debug(data)
+            serializer = MarkersSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                logger.debug(serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif address:
+            logger.debug("WENTINTOADDRESS")
+            address = urllib.quote(address.encode("utf-8"))
+            logger.debug(address)
+            url = 'http://maps.googleapis.com/maps/api/geocode/json?address='+address+'&sensor=true'
+            data = urllib2.urlopen(url).read()
+            json_data = json.loads(data)
+            stat = json_data.get('status')
+            print
+            print
+            logger.debug(json_data)
+            print
+            print
+            print '{}'.format(stat)
+            if stat in 'OK':
+                result = json_data['results'][0]         
+                latitude = result['geometry']['location']['lat']
+                longitude = result['geometry']['location']['lng']
+                
+                data = {'title': request.data.get('title'),
+                        'map': map_id,
+                        'latitude': latitude,
+                        'longitude': longitude,
+                        'description': request.data.get('description'),
+                        'external_url': request.data.get('externalurl'),
+                        'fileupload': request.data.get('fileupload'),
+                        'created_by': logged_in_user_id,
+                        'modified_by': logged_in_user_id,
+                        'date_created': timezone.now(),
+                        'date_modified': timezone.now(),
+                        }
+                logger.debug("PRINT DATA")
+                logger.debug(data)
+                serializer = MarkersSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    print '{}'.format(json.dumps({'latitude': latitude, 'longitude': longitude}))
+                    return Response({'latitude': latitude, 'longitude': longitude}, status=status.HTTP_201_CREATED)
+                else:
+                    logger.debug(serializer.errors)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                errors = ['Address not found!']
+                return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            logger.debug(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            errors = ['You did not enter either an address or lat/long. Try again.']
+            return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @login_required
 @api_view(['GET','POST'])
