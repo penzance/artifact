@@ -9,6 +9,30 @@
 				var GET_MARKERS = $djangoUrl.reverse('artifact:markers', [$scope.map_id]);
 				var GET_CSV = $djangoUrl.reverse('artifact:csv_points', [$scope.map_id]);
 				var responsePromise = $http.get(GET_LOC);
+
+				var showInfo = function(marker) {
+					$scope.point.title = marker.title;
+					$scope.point.description = marker.description;
+					$scope.point.external_url = marker.external_url;
+					$scope.point.latitude = marker.latitude;
+					$scope.point.longitude = marker.longitude;
+				};
+
+				var createMarker = function(info) {
+					var marker = new google.maps.Marker({
+						map: $scope.map,
+						position: new google.maps.LatLng(info.latitude, info.longitude),
+						title: info.title
+					});
+					marker.description = info.description;
+					marker.external_url = info.external_url;
+					google.maps.event.addListener(marker, 'mouseover', function() {
+						showInfo(marker);
+						$scope.$apply();
+					});
+					$scope.markers.push(marker);
+					marker.setMap($scope.map);
+				};
 				
 				responsePromise.success(function(data, status, headers, config) {
 					var mapOptions = {
@@ -34,37 +58,10 @@
 						mapOptions);
 
 					var infoWindow = new google.maps.InfoWindow();
-
-					var showInfo = function(marker) {
-						$scope.point.title = marker.title;
-						$scope.point.description = marker.description;
-						$scope.point.external_url = marker.external_url;
-						$scope.point.latitude = marker.latitude;
-						$scope.point.longitude = marker.longitude;
-					};
 					
-					var createMarker = function(info) {
-						var marker = new google.maps.Marker({
-							map: $scope.map,
-							position: new google.maps.LatLng(info.latitude, info.longitude),
-							title: info.title
-						});
-						marker.description = info.description;
-						marker.external_url = info.external_url;
-						google.maps.event.addListener(marker, 'mouseover', function() {
-							showInfo(marker);
-							$scope.$apply();
-						});
-						$scope.markers.push(marker);
-						marker.setMap($scope.map);
-					};
 
 					$scope.selectMarker = function(e, marker) {
-					// 	e.preventDefault();
-					// 	google.maps.event.trigger(marker, 'mouseover');
-					// };
 						showInfo(marker);
-						$scope.$apply();
 					};
 
 
@@ -88,9 +85,6 @@
 							} // set the headers so angular passing info as form data (not request payload)
 						})
 						.then(function(data) {
-							// console.log("PRINTING DATA");
-							// console.log(data['data']);
-							// console.log(data['data']['longitude']);
 							createMarker({
 								'title': $scope.formData.title,
 								'latitude': data['data']['latitude'],

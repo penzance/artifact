@@ -34,7 +34,7 @@
 				<h3>Markers</h3>
 				<ul>
 					<li id="class" ng-repeat="marker in markers | orderBy : 'title'">
-         				<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a> <a data-toggle="modal" data-target="#editpoint" ng-click="selectMarker($event, marker)">CLICK TO EDIT </a>
+         				<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a> <a class="btn btn-xs btn-warning" data-toggle="modal" data-target="#editpoint">CLICK TO EDIT </a><br>
 					</li>
 				</ul>
 			</div>
@@ -93,7 +93,7 @@
 
 			  	  <div id="externalurl-group" class="form-group" ng-class="{ 'has-error' : errorExternalurl }">
 					<label class="control-label" for="id_externalurl">External URL</label> 
-					<input type="text" id="id_externalurl" name="externalurl" ng-model="formData.externalurl" maxlength="250" class="form-control">
+					<input type="text" id="id_externalurl" name="externalurl" ng-model="formData.externalurl" maxlength="250" class="form-control" required>
 					<span class="help-block" ng-show="errorExternalurl">{{ errorExternalurl }}</span> 
 				  </div>
 
@@ -156,7 +156,7 @@
 			  		</div>
 
 			  		<div class="modal-body">
-			  		Use this form to edit the selected point.<br><br>
+			  		Use this form to edit the selected point. {{point.title}}<br><br>
 					<form ng-submit="processForm()" id="form2">
 				  
 				  <div id="title-group" class="form-group" ng-class="{ 'has-error' : errorTitle }">
