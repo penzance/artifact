@@ -72,6 +72,8 @@
 					$scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 					var infoWindow = new google.maps.InfoWindow();
+
+					// change the selected marker on mouseover
 					$scope.selectMarker = function(e, marker)
 					{
 						showInfo(marker);
@@ -86,11 +88,10 @@
 					}
 				});
 
-				// processform adds a single point to the map
+				// adds a single point to the map
 				$scope.formData = {};
 				$scope.processForm = function()
 				{
-					console.log($scope.formData);
 					$http(
 						{
 							method: 'POST',
@@ -112,7 +113,7 @@
 								'external_url': $scope.formData.externalurl,
 								'fileupload': $scope.formData.fileupload,
 							});
-							$('#myModal')
+							$('#singlepointmodal')
 								.modal('hide');
 						});
 				};
@@ -121,6 +122,7 @@
 				$scope.uploadFile = function()
 				{
 
+					// configuration for csv parser
 					function buildConfig()
 					{
 						return {
@@ -135,12 +137,14 @@
 							comments: false,
 							complete: function(results, file)
 							{
-								var submitlist = []
+								// list of points to pass to api.py
+								var submitlist = [];
 								for (i = 0; i < results.data.length; i++)
 								{
+									// if the title is empty, we ignore the row
 									if (results.data[i].title.length > 0)
 									{
-										submitlist.push(results.data[i])
+										submitlist.push(results.data[i]);
 										createMarker(
 										{
 											'title': results.data[i].title,
@@ -149,7 +153,6 @@
 											'description': results.data[i].description,
 											'external_url': results.data[i].externalurl
 										});
-										console.log(results.data[i]);
 									}
 									else
 									{
@@ -157,7 +160,7 @@
 									}
 								}
 								$http
-								(
+									(
 									{
 										method: 'POST',
 										url: GET_CSV,
@@ -166,9 +169,7 @@
 										{
 											'Content-Type': 'application/x-www-form-urlencoded'
 										} // set the headers so angular passing info as form data (not request payload)
-									}
-								)
-								// console.log(results.data);
+									});
 							},
 							error: undefined,
 							download: false,
@@ -178,7 +179,9 @@
 							beforeFirstChunk: undefined,
 						};
 					}
+
 					var config = buildConfig();
+					// get the file that is selected
 					var files = $('#files')[0].files;
 					if (files.length > 0)
 					{
@@ -194,88 +197,8 @@
 					{
 						window.alert("You must upload a valid file. Please try again.");
 					}
-					// $http(
-					// 	{
-					// 		method: 'POST',
-					// 		url: GET_CSV,
-					// 		data: results.data,
-					// 		headers:
-					// 		{
-					// 			'Content-Type': 'application/x-www-form-urlencoded'
-					// 		} // set the headers so angular passing info as form data (not request payload)
-					// 	})
-					// 	.then(function() {});
 					$('#addlist')
 						.modal('hide');
 				};
-
-
-				// $('#parse_csv')
-				// 	.click(function()
-				// {
-
-
-				// 	function buildConfig()
-				// 	{
-				// 		return {
-				// 			delimiter: "",
-				// 			newline: "",
-				// 			header: true,
-				// 			dynamicTyping: false,
-				// 			preview: 0,
-				// 			step: undefined,
-				// 			encoding: "",
-				// 			worker: false,
-				// 			comments: false,
-				// 			complete: function(results, file)
-				// 			{
-				// 				for (i = 0; i < results.data.length; i++)
-				// 				{
-				// 					if (results.data[i].title.length > 0)
-				// 					{
-				// 						createMarker(
-				// 						{
-				// 							'title': results.data[i].title,
-				// 							'latitude': results.data[i].latitude,
-				// 							'longitude': results.data[i].longitude,
-				// 							'description': results.data[i].description,
-				// 							'external_url': results.data[i].externalurl
-				// 						});
-				// 						console.log(results.data[i]);
-				// 					}
-				// 					else
-				// 					{
-				// 						continue;
-				// 					}
-				// 				}
-				// 				// console.log(results.data);
-				// 			},
-				// 			error: undefined,
-				// 			download: false,
-				// 			fastMode: undefined,
-				// 			skipEmptyLines: true,
-				// 			chunk: undefined,
-				// 			beforeFirstChunk: undefined,
-				// 		};
-				// 	}
-				// 	var config = buildConfig();
-				// 	var files = $('#files')[0].files;
-				// 	if (files.length > 0)
-				// 	{
-				// 		$('#files')
-				// 			.parse(
-				// 			{
-				// 				config: config,
-				// 				before: function(file, inputElem) {},
-				// 				complete: function() {}
-				// 			});
-				// 	}
-				// 	else
-				// 	{
-				// 		window.alert("You must upload a valid file. Please try again.");
-				// 	}
-
-
-				// });
 			}]);
 })();
