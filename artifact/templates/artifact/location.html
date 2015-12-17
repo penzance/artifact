@@ -39,6 +39,9 @@
 						"btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
 					</li>
 				</ul>
+				<br>
+				<button class="btn btn-info btn-sm" data-target="#singlepointmodal" data-toggle="modal" id="add-location"type="button">Add New Marker (+)</button> 
+				<button class="btn btn-info btn-sm" data-target="#addlist"data-toggle="modal" id="add-list" type="button">CSV Marker Upload (+)</button> 
 			</div>
 
 			<div class="col-xs-8 col-md-3">
@@ -83,8 +86,7 @@
 </textarea> <span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span>
 							</div>
 
-							<h3>Please enter either an address or set of lat/long coordinates. If you enter both, the
-							lat/long points will be used.</h3>
+							<h4>Enter either an address or set of coordinates. If you enter both, only the coordinates will be used.</h4>
 
 							<div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
 								<label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
@@ -107,17 +109,16 @@
 
 							<div class="form-group" id="externalurl-group" ng-class=
 							"{ 'has-error' : errorExternalurl }">
-								<label class="control-label" for="id_externalurl">External URL</label> <input class=
+								<label class="control-label" for="id_externalurl">External URL (Required)</label> <input class=
 								"form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
 								"formData.externalurl" required="" type="text"> <span class="help-block" ng-show=
 								"errorExternalurl">{{ errorExternalurl }}</span>
 							</div>
-							<button class="btn btn-primary" form="form1" type="submit">Save Marker</button>
-							<button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
 						</form>
 					</div>
 
 					<div class="modal-footer">
+						<button class="btn btn-primary" form="form1" type="submit">Save Marker</button>
 						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
 					</div>
 				</div>
@@ -144,14 +145,13 @@
 						<br>
 
 						<form enctype="multipart/form-data">
-							<input accept=".csv" id="files" type="file"> <button class="btn btn-default" data-dismiss=
-							"modal" type="button">Cancel</button>
+							<input accept=".csv" id="files" type="file"> 
 						</form>
-						<button class="btn btn-primary" id="parse_csv" ng-click="uploadFile()" type="submit">Save
-						Markers</button>
 					</div>
 
 					<div class="modal-footer">
+					<button class="btn btn-primary" id="parse_csv" ng-click="uploadFile()" >Save
+						Markers</button>
 						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
 					</div>
 				</div>
@@ -215,10 +215,7 @@
 			</div>
 		</div>
 	</div>
-	
-	<button class="btn btn-info btn-sm" data-target="#singlepointmodal" data-toggle="modal" id="add-location"
-	type="button">Add Marker (+)</button> <button class="btn btn-info btn-sm" data-target="#addlist"
-	data-toggle="modal" id="add-list" type="button">Add List of Markers (+)</button> {% endverbatim %}
+	{% endverbatim %}
 </body>
 
 {% endblock body %}
