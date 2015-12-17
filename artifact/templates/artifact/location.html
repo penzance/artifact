@@ -32,6 +32,7 @@
 			<div class="col-xs-12 col-md-9">
 				<div id="map-canvas"></div>
 				<h3>Markers</h3>
+				{{fileContent}}
 				<ul>
 					<li id="class" ng-repeat="marker in markers | orderBy : 'title'">
          				<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a> <a class="btn btn-xs btn-warning" data-toggle="modal" data-target="#editpoint">CLICK TO EDIT </a><br>
@@ -127,10 +128,10 @@
 			  		<div class="modal-body">
 			  		You can use this form to upload a list of points in a CSV file. You MUST enter points using the following file as a template. You must keep the header row intact. (<a href="/static/artifact/csv/add_points_template.csv">Point Upload Template</a>)<br><br>
 			  		<form enctype="multipart/form-data">
-			  		<input type="file" file-model="myFile"/><br>
+			  		<input type="file" id="files">
 				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</form>
-				<button type="submit" class="btn btn-primary" ng-click="uploadFile()">
+				<button type="submit" class="btn btn-primary" ng-click="uploadFile()" id="parse_csv">
       				Save Markers
   				</button>
 			  </div>

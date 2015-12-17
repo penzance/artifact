@@ -167,17 +167,21 @@ def marker_collection(request, map_id):
 @login_required
 @api_view(['GET','POST'])
 def csv_points(request, map_id):
-    requeststring = request.data[u' filename'].splitlines()
     logged_in_user_id = request.user.username
+    # for i in request.data.dict().keys():
+    #     logger.debug(i)
+    datatouse = request.data.dict().keys()[0]
+    datatouse = json.loads(datatouse)
     errors = []
-    for row in requeststring[4:-1]:
-        items = row.split(",")
-        data = {'title': items[0],
+    for item in datatouse:
+        logger.debug(type(item))
+        logger.debug(item)
+        data = {'title': item[u'title'],
                 'map': map_id,
-                'latitude': items[2],
-                'longitude': items[3],
-                'description': items[1],
-                'external_url': items[4],
+                'latitude': item[u'latitude'],
+                'longitude': item[u'longitude'],
+                'description': item[u'description'],
+                'external_url': item[u'externalurl'],
                 'created_by': logged_in_user_id,
                 'modified_by': logged_in_user_id,
                 'date_created': timezone.now(),
@@ -192,9 +196,26 @@ def csv_points(request, map_id):
             #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             errors.append(serializer.errors)
     if len(errors) != 0:
+        logger.debug (errors)
         return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # # logged_in_user_id = request.LTI['lis_person_sourcedid']
     # logged_in_user_id = request.user.username
