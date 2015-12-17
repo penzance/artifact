@@ -1,7 +1,7 @@
 (function()
 {
 
-  var app = angular.module('app', ['ngSanitize', 'ngAnimate', 'ng.django.urls'])
+  var app = angular.module('app', ['ngSanitize', 'ngAnimate', 'ng.django.urls', 'ui.bootstrap'])
     .config(function($httpProvider)
     {
       $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
