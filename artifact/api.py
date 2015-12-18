@@ -44,10 +44,11 @@ def map_collection(request, canvas_course_id):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-
+        logger.debug(request.data)
         logged_in_user_id = request.LTI['lis_person_sourcedid']
         data = { 'canvas_course_id': canvas_course_id,
                  'title': request.data.get('title'),
+                 'description': request.data.get('description'),
                  'latitude': request.data.get('latitude'),
                  'longitude': request.data.get('longitude'),
                  'zoom': int(request.data.get('zoom')),

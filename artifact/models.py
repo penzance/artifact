@@ -20,6 +20,7 @@ class Map(models.Model):
 
     canvas_course_id = models.IntegerField()
     title = models.CharField(max_length=250)
+    description = models.CharField(max_length=500)
     latitude = models.CharField(max_length=32)
     longitude = models.CharField(max_length=32)
     zoom = models.IntegerField()
