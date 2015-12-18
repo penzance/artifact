@@ -43,8 +43,43 @@
 
 					$scope.markers.push(marker);
 					marker.setMap($scope.map);
-				};
 
+
+					// Add a new marker by clicking on the map
+					var pinColor = "008000";
+				    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+				        new google.maps.Size(21, 34),
+				        new google.maps.Point(0,0),
+				        new google.maps.Point(10, 34));
+
+					var newmarker;
+					function placeMarker(location) {
+					  if ( newmarker ) {
+					    newmarker.setPosition(location);
+					  } else {
+					    newmarker = new google.maps.Marker({
+					      position: location,
+					      map: $scope.map,
+					      icon: pinImage,
+					    });
+					  }
+					}
+
+					// Move the marker that the user has added by clicking
+					google.maps.event.addListener($scope.map, 'click', function(event) {
+					  $scope.infowindow.close($scope.map, this);
+					  placeMarker(event.latLng);
+
+					  var latitude = event.latLng.lat().toFixed(4);
+					  var longitude = event.latLng.lng().toFixed(4);
+
+					  newmarker.addListener('mouseover', function() 
+					  {
+	  						$scope.infowindow.setContent("<p>Latitute: " + latitude + " Longitude: " + longitude + "</p><p><a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>")
+	    					$scope.infowindow.open($scope.map, this);
+	  					});
+					});
+				};
 
 				responsePromise.success(function(data, status, headers, config)
 				{
@@ -71,8 +106,7 @@
 					$scope.maptitle = data.title;
 					$scope.description = data.description;
 					$scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-					var infoWindow = new google.maps.InfoWindow();
+					$scope.infowindow = new google.maps.InfoWindow();
 
 					// change the selected marker on mouseover
 					$scope.selectMarker = function(e, marker)
@@ -87,6 +121,8 @@
 						createMarker(data.markers[i]);
 					}
 				});
+
+
 
 				// adds a single point to the map
 				$scope.formData = {};
