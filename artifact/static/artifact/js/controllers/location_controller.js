@@ -47,37 +47,49 @@
 
 					// Add a new marker by clicking on the map
 					var pinColor = "008000";
-				    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-				        new google.maps.Size(21, 34),
-				        new google.maps.Point(0,0),
-				        new google.maps.Point(10, 34));
+					var pinImage = new google.maps.MarkerImage(
+						"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+						new google.maps.Size(21, 34),
+						new google.maps.Point(0, 0),
+						new google.maps.Point(10, 34));
 
 					var newmarker;
-					function placeMarker(location) {
-					  if ( newmarker ) {
-					    newmarker.setPosition(location);
-					  } else {
-					    newmarker = new google.maps.Marker({
-					      position: location,
-					      map: $scope.map,
-					      icon: pinImage,
-					    });
-					  }
+
+					function placeMarker(location)
+					{
+						if (newmarker)
+						{
+							newmarker.setPosition(location);
+						}
+						else
+						{
+							newmarker = new google.maps.Marker(
+							{
+								position: location,
+								map: $scope.map,
+								icon: pinImage,
+							});
+						}
 					}
 
 					// Move the marker that the user has added by clicking
-					google.maps.event.addListener($scope.map, 'click', function(event) {
-					  $scope.infowindow.close($scope.map, this);
-					  placeMarker(event.latLng);
+					google.maps.event.addListener($scope.map, 'click', function(event)
+					{
+						$scope.infowindow.close($scope.map, this);
+						placeMarker(event.latLng);
 
-					  var latitude = event.latLng.lat().toFixed(4);
-					  var longitude = event.latLng.lng().toFixed(4);
+						var latitude = event.latLng.lat()
+							.toFixed(4);
+						var longitude = event.latLng.lng()
+							.toFixed(4);
 
-					  newmarker.addListener('mouseover', function() 
-					  {
-	  						$scope.infowindow.setContent("<p>Latitute: " + latitude + " Longitude: " + longitude + "</p><p><a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>")
-	    					$scope.infowindow.open($scope.map, this);
-	  					});
+						newmarker.addListener('mouseover', function()
+						{
+							$scope.infowindow.setContent("<p>Latitute: " + latitude + " Longitude: " + longitude +
+								"</p><p><a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>"
+							);
+							$scope.infowindow.open($scope.map, this);
+						});
 					});
 				};
 
@@ -240,26 +252,26 @@
 				$scope.downloadcsv = function()
 				{
 					$http(
-					{
-						method: 'GET',
-						url: DOWNLOAD_CSV,
-						headers:
 						{
-							'Content-Type': 'text/csv'
-						} // set the headers so angular passing info as form data (not request payload)
-					}).success(function(data){
-						var csvContent = "data:text/csv;charset=utf-8,";
-						csvContent += data
-						var encodedUri = encodeURI(csvContent);
-						var link = document.createElement("a");
-						link.setAttribute("href", encodedUri);
-						link.setAttribute("download", "" + $scope.maptitle + "_points.csv");
-						link.click();
-						// window.open(encodedUri);
-					})	
+							method: 'GET',
+							url: DOWNLOAD_CSV,
+							headers:
+							{
+								'Content-Type': 'text/csv'
+							} // set the headers so angular passing info as form data (not request payload)
+						})
+						.success(function(data)
+						{
+							var csvContent = "data:text/csv;charset=utf-8,";
+							csvContent += data;
+							var encodedUri = encodeURI(csvContent);
+							var link = document.createElement("a");
+							link.setAttribute("href", encodedUri);
+							link.setAttribute("download", "" + $scope.maptitle + "_points.csv");
+							link.click();
+							// window.open(encodedUri);
+						});
 				};
-
-
 			}]);
 
 
@@ -276,6 +288,8 @@
 
 
 
+
+	// THIS STUFF IS ALL FOR THE ANGULAR BOOTSTRAP MODAL
 
 	angular.module('app')
 		.controller('ModalDemoCtrl', function($scope, $uibModal, $log)
@@ -343,32 +357,7 @@
 		});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// END STUFF FOR THE ANGULAR BOOTSTRAP MODAL
 
 
 })();
