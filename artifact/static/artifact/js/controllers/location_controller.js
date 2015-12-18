@@ -9,6 +9,7 @@
 				var GET_LOC = $djangoUrl.reverse('artifact:map_location', [$scope.map_id]);
 				var GET_MARKERS = $djangoUrl.reverse('artifact:markers', [$scope.map_id]);
 				var GET_CSV = $djangoUrl.reverse('artifact:csv_points', [$scope.map_id]);
+				var DOWNLOAD_CSV = $djangoUrl.reverse('artifact:download_csv', [$scope.map_id]);
 				var responsePromise = $http.get(GET_LOC);
 
 				// displays the selected point on the right sidebar
@@ -68,6 +69,7 @@
 					}
 
 					$scope.maptitle = data.title;
+					$scope.description = data.description;
 					$scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 					var infoWindow = new google.maps.InfoWindow();
@@ -80,7 +82,6 @@
 
 					$scope.point = [];
 					$scope.markers = [];
-
 					for (i = 0; i < data.markers.length; i++)
 					{
 						createMarker(data.markers[i]);
@@ -198,6 +199,31 @@
 					$('#addlist')
 						.modal('hide');
 				};
+
+				// download a CSV with all the points from the map
+				$scope.downloadcsv = function()
+				{
+					$http(
+					{
+						method: 'GET',
+						url: DOWNLOAD_CSV,
+						headers:
+						{
+							'Content-Type': 'text/csv'
+						} // set the headers so angular passing info as form data (not request payload)
+					}).success(function(data){
+						var csvContent = "data:text/csv;charset=utf-8,";
+						csvContent += data
+						var encodedUri = encodeURI(csvContent);
+						var link = document.createElement("a");
+						link.setAttribute("href", encodedUri);
+						link.setAttribute("download", "" + $scope.maptitle + "_points.csv");
+						link.click();
+						// window.open(encodedUri);
+					})	
+				};
+
+
 			}]);
 
 
@@ -229,7 +255,7 @@
 				var modalInstance = $uibModal.open(
 				{
 					animation: $scope.animationsEnabled,
-					template: '<div class="modal-header"><h3 class="modal-title">Im a modal!</h3></div>',
+					template: '#myModalContent',
 					controller: 'ModalInstanceCtrl',
 					size: size,
 					resolve:

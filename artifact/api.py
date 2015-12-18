@@ -44,7 +44,6 @@ def map_collection(request, canvas_course_id):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        logger.debug(request.data)
         logged_in_user_id = request.LTI['lis_person_sourcedid']
         data = { 'canvas_course_id': canvas_course_id,
                  'title': request.data.get('title'),
@@ -80,6 +79,26 @@ def map_location(request, map_id):
         serializer = MapSerializer(map)
         return Response(serializer.data)
 
+# Get the map that is selected
+@login_required
+@api_view(['GET'])
+def download_csv(request, map_id):
+    try:
+        map = Map.objects.get(pk=map_id)
+    except Map.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MapSerializer(map)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="downloaded_points.csv"'
+        fieldnames = ['title', 'map', 'latitude', 'longitude', 'description', 'external_url', 
+            'created_by', 'modified_by', 'date_created', 'date_modified']
+        writer = csv.DictWriter(response, fieldnames=fieldnames)
+        writer.writeheader()
+        for dictionary in serializer.data['markers']:
+            writer.writerow(dictionary)
+        return response
 
 # Generate the points for the selected map and process single point upload
 @login_required
@@ -90,7 +109,6 @@ def marker_collection(request, map_id):
 
         maps = Markers.objects.filter(map_id=map_id)
         serializer = MarkersSerializer(maps, many=True)
-
         return Response(serializer.data)
 
     elif request.method == 'POST':
