@@ -27,6 +27,7 @@
 				<h1>{{maptitle}}</h1>
 				<h4>{{description}}</h4>
 				<br>
+				<p>Click the map to add a point.</p>
 			</div>
 		</div>
 
@@ -41,12 +42,16 @@
 					<a class="btn btn-success" href="#" ng-click="downloadcsv()">Download all points (CSV)</a>
 				</div>
 				<h3>Markers</h3>
-				<ul>
-					<li id="class" ng-repeat="marker in markers | orderBy : 'title'">
-						<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a> <a class=
-						"btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
-					</li>
-				</ul> 
+				<table>
+					<tr id="class" ng-repeat="marker in markers | orderBy : 'title'">
+						<td>
+							<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
+						</td>
+						<td>
+							<a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
+						</td>
+					</tr>
+				</table> 
 			</div>
 
 			<div class="col-xs-8 col-md-3">
@@ -56,6 +61,8 @@
 
 				<p><a href="{{external_url}}">{{point.external_url}}</a>
 				</p>
+				<p id="panorama-warning"></p>
+				<div id="panorama-canvas"></div>
 			</div>
 		</div>
 		<!--End right side bar-->
@@ -108,15 +115,15 @@
 
 							<div class="form-group" id="address-group" ng-class="{ 'has-error' : errorAddress }">
 								<label class="control-label" for="id_address">Address</label> <input class="form-control"
-								id="id_externalurl" maxlength="250" name="address" ng-model="formData.address" type="text">
+								id="id_address" maxlength="250" name="address" ng-model="formData.address" type="text">
 								<span class="help-block" ng-show="errorAddress">{{ errorAddress }}</span>
 							</div>
 
 							<div class="form-group" id="externalurl-group" ng-class=
 							"{ 'has-error' : errorExternalurl }">
-								<label class="control-label" for="id_externalurl">External URL (Required)</label> <input class=
+								<label class="control-label" for="id_externalurl">External URL</label> <input class=
 								"form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
-								"formData.externalurl" required="" type="text"> <span class="help-block" ng-show=
+								"formData.externalurl" type="text"> <span class="help-block" ng-show=
 								"errorExternalurl">{{ errorExternalurl }}</span>
 							</div>
 						</form>
