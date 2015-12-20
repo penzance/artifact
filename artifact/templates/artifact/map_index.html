@@ -18,8 +18,11 @@
 
 <body ng-app="app" ng-init="canvas_course_id={{canvas_course_id}}">
 	{% verbatim %}
-
 	<div class="container artifact" ng-controller="AddNewMapController">
+		<div>
+			<h1>Artifact Map Tool</h1>
+			<h4>Each view below represents a seperate map instance each with its own unique set of points. You may either click on a map to see its points or add a new location.</h4>
+		</div>
 		<div id="messages" ng-show="message">
 			{{ message }}
 		</div>
