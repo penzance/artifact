@@ -50,7 +50,7 @@ class Markers(models.Model):
     latitude = models.CharField(max_length=32)
     longitude = models.CharField(max_length=32)
     description = models.CharField(max_length=2000)
-    external_url = models.CharField(max_length=250)
+    external_url = models.CharField(max_length=250, default="")
     created_by = models.CharField(max_length=32)
     modified_by = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
