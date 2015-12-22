@@ -99,8 +99,8 @@
 							new google.maps.Point(10, 34));
 						if (newmarker) {
 							newmarker.setPosition(location);
-							$scope.infowindow.setContent("<a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>");
-							$scope.infowindow.open($scope.map, newmarker);
+							$scope.newmarker_window.setContent("<a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>");
+							$scope.newmarker_window.open($scope.map, newmarker);
 						}
 						else {
 							newmarker = new google.maps.Marker({
@@ -108,15 +108,28 @@
 								map: $scope.map,
 								icon: pinImage,
 							});
-							$scope.infowindow.setContent("<a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>");
-							$scope.infowindow.open($scope.map, newmarker);
+							$scope.newmarker_window.setContent("<a data-target='#singlepointmodal' data-toggle='modal' id='add-location' type='button'>Save this point</a>");
+							$scope.newmarker_window.open($scope.map, newmarker);
+
+							google.maps.event.addListener(newmarker, 'mouseover', function(event) {
+								$scope.newmarker_window.open($scope.map, this);
+								// placeMarker(event.latLng);
+								$scope.infowindow.close($scope.map, marker);
+								$scope.point.title = 'New point';
+								$scope.point.description = '';
+								$scope.point.external_url = '';
+								setPanorama(event.latLng);
+								$scope.$apply();
+							});
 						}
 					}
 
 
 					// on marker mouseover, change the information in the right sidebar
 					google.maps.event.addListener(marker, 'mouseover', function(event) {
-						$scope.infowindow.close($scope.map, newmarker);
+						$scope.newmarker_window.close($scope.map, newmarker);
+						$scope.infowindow.setContent("<p><b>" + marker.title + "</b></p><p>" + marker.description + "</p>");
+						$scope.infowindow.open($scope.map, marker);
 						setPanorama(event.latLng);
 						showInfo(marker);
 						$scope.$apply();
@@ -125,11 +138,12 @@
 
 					// Move the marker that the user has added by clicking
 					google.maps.event.addListener($scope.map, 'click', function(event) {
-						$scope.infowindow.close($scope.map, this);
+						$scope.newmarker_window.open($scope.map, this);
+						placeMarker(event.latLng);
+						$scope.infowindow.close($scope.map, marker);
 						$scope.point.title = 'New point';
 						$scope.point.description = '';
 						$scope.point.external_url = '';
-						placeMarker(event.latLng);
 						setPanorama(event.latLng);
 						$scope.$apply();
 					});
@@ -159,12 +173,16 @@
 					$scope.maptitle = data.title;
 					$scope.description = data.description;
 					$scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+					$scope.newmarker_window = new google.maps.InfoWindow();
 					$scope.infowindow = new google.maps.InfoWindow();
 
 					// change the selected marker on when clicking from list
 					$scope.selectMarker = function(e, marker) {
 						setPanorama(marker.position);
 						showInfo(marker);
+						$scope.infowindow.setContent("<p><b>" + marker.title + "</b></p><p>" + marker.description + "</p>");
+						$scope.infowindow.open($scope.map, marker);
+						$scope.newmarker_window.close($scope.map, this);
 					};
 
 					$scope.point = [];
