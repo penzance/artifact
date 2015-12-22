@@ -41,8 +41,16 @@ class Map(models.Model):
 
     @property
     def thumbnail(self):
+        if self.maptype == 1:
+            map_type = 'satellite'
+        elif self.maptype == 2:
+            map_type = 'roadmap'
+        elif self.maptype == 3:
+            map_type = 'hybrid'
+        elif self.maptype == 4:
+            map_type = 'terrain'
         return settings.MAP_THUMBNAIL_URL.format(latitude=self.latitude, longitude=self.longitude,
-                                                 zoom=self.zoom, maptype=self.maptype)
+                                                 zoom=self.zoom, maptype=map_type)
 
 
 class Markers(models.Model):
