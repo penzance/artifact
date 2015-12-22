@@ -20,6 +20,10 @@
 					$scope.point.longitude = marker.longitude;
 				};
 
+				$( "#hideshow" ).click(function() {
+				    $( "#panorama-wrapper" ).toggle();
+				});
+
 				// Generates small panorama image in right sidebar. It also makes sure the street view is
 				// always facing in the direction of the marker that is selected
 				function setPanorama(location) {

@@ -41,28 +41,36 @@
 					<button class="btn btn-primary" data-target="#addlist"data-toggle="modal" id="add-list" type="button">Add Multiple Markers (+)</button>
 					<a class="btn btn-success" href="#" ng-click="downloadcsv()">Download all points (CSV)</a>
 				</div>
-				<h3>Markers</h3>
-				<table>
-					<tr id="class" ng-repeat="marker in markers | orderBy : 'title'">
-						<td>
-							<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
-						</td>
-						<td>
-							<a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
-						</td>
-					</tr>
-				</table> 
-			</div>
 
-			<div class="col-xs-8 col-md-3">
+			</div>
+				<div>
+					<h3>Markers</h3>
+					<table>
+						<tr id="class" ng-repeat="marker in markers | orderBy : 'title'">
+							<td>
+								<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
+							</td>
+							<td>
+								<a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
+							</td>
+						</tr>
+					</table> 
+				</div>
+
+		</div>
+		<div class="row">
+				<div class="col-xs-8 col-md-9">
 				<h3>{{point.title}}</h3>
 
 				<p>{{point.description}}</p>
 
 				<p><a href="{{external_url}}">{{point.external_url}}</a>
 				</p>
-				<p id="panorama-warning"></p>
-				<div id="panorama-canvas"></div>
+				<input type='button' id='hideshow' value='Show/Hide Street View'>
+				<div id="panorama-wrapper">
+					<p id="panorama-warning"></p>
+					<div id="panorama-canvas"></div>
+				</div>
 			</div>
 		</div>
 		<!--End right side bar-->
