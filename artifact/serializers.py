@@ -6,7 +6,7 @@ class MarkersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Markers
-        fields = ('title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by', 'modified_by',
+        fields = ('title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by_id', 'created_by_full_name', 'modified_by_id',
         	'date_created', 'date_modified')
 
 
@@ -16,7 +16,7 @@ class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Map
         fields = ('id', 'canvas_course_id', 'title', 'latitude', 'longitude', 'zoom', 'maptype', 'thumbnail', 'markers',
-                  'date_created', 'date_modified', 'created_by', 'modified_by', 'description')
+                  'date_created', 'date_modified', 'created_by_id', 'created_by_full_name', 'modified_by_id', 'description')
 
 
 

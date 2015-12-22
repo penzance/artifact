@@ -25,8 +25,9 @@ class Map(models.Model):
     longitude = models.CharField(max_length=32)
     zoom = models.IntegerField()
     maptype = models.IntegerField(choices=MAP_TYPE_CHOICES, default=ROADMAP)
-    created_by = models.CharField(max_length=32)
-    modified_by = models.CharField(max_length=32)
+    created_by_id = models.CharField(max_length=32)
+    modified_by_id = models.CharField(max_length=32)
+    created_by_full_name = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
 
@@ -51,8 +52,9 @@ class Markers(models.Model):
     longitude = models.CharField(max_length=32)
     description = models.CharField(max_length=2000)
     external_url = models.CharField(max_length=250, default="")
-    created_by = models.CharField(max_length=32)
-    modified_by = models.CharField(max_length=32)
+    created_by_id = models.CharField(max_length=32)
+    modified_by_id = models.CharField(max_length=32)
+    created_by_full_name = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
 

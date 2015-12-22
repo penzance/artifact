@@ -44,7 +44,9 @@ def map_collection(request, canvas_course_id):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        logged_in_user_id = request.LTI['lis_person_sourcedid']
+        LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
+        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
+        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
         data = { 'canvas_course_id': canvas_course_id,
                  'title': request.data.get('title'),
                  'description': request.data.get('description'),
@@ -53,8 +55,9 @@ def map_collection(request, canvas_course_id):
                  'zoom': int(request.data.get('zoom')),
                  'maptype': int(request.data.get('maptype')),
                  'date_modified': timezone.now(),
-                 'created_by': logged_in_user_id,
-                 'modified_by': logged_in_user_id,
+                 'created_by_id': logged_in_user_id,
+                 'created_by_full_name': logged_in_user_name,
+                 'modified_by_id': logged_in_user_id,
                  }
 
         serializer = MapSerializer(data=data)
@@ -79,7 +82,7 @@ def map_location(request, map_id):
         serializer = MapSerializer(map)
         return Response(serializer.data)
 
-# Get the map that is selected
+# Download the markers for the selected map in CSV format
 @login_required
 @api_view(['GET'])
 def download_csv(request, map_id):
@@ -92,9 +95,8 @@ def download_csv(request, map_id):
         serializer = MapSerializer(map)
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="downloaded_points.csv"'
-        fieldnames = ['title', 'map', 'latitude', 'longitude', 'description', 'external_url', 
-            'created_by', 'modified_by', 'date_created', 'date_modified']
-        writer = csv.DictWriter(response, fieldnames=fieldnames)
+        fieldnames = ['title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by_full_name', 'date_created', 'date_modified']
+        writer = csv.DictWriter(response, fieldnames=fieldnames, extrasaction='ignore')
         writer.writeheader()
         for dictionary in serializer.data['markers']:
             writer.writerow(dictionary)
@@ -112,7 +114,13 @@ def marker_collection(request, map_id):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        logged_in_user_id = request.user.username
+        LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
+        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
+        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logger.debug(request.user)
+        logger.debug(request.user.username)
+        # logger.debug(logged_in_user_name)
+        logger.debug(logged_in_user_id)
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
         address = request.data.get('address')
@@ -132,8 +140,9 @@ def marker_collection(request, map_id):
                     'description': request.data.get('description'),
                     'external_url': externalurl,
                     'fileupload': request.data.get('fileupload'),
-                    'created_by': logged_in_user_id,
-                    'modified_by': logged_in_user_id,
+                    'created_by_id': logged_in_user_id,
+                    'created_by_full_name': logged_in_user_name,
+                    'modified_by_id': logged_in_user_id,
                     'date_created': timezone.now(),
                     'date_modified': timezone.now(),
                     }
@@ -166,8 +175,9 @@ def marker_collection(request, map_id):
                         'description': request.data.get('description'),
                         'external_url': request.data.get('externalurl'),
                         'fileupload': request.data.get('fileupload'),
-                        'created_by': logged_in_user_id,
-                        'modified_by': logged_in_user_id,
+                        'created_by_id': logged_in_user_id,
+                        'created_by_full_name': logged_in_user_name,
+                        'modified_by_id': logged_in_user_id,
                         'date_created': timezone.now(),
                         'date_modified': timezone.now(),
                         }
@@ -193,7 +203,9 @@ def marker_collection(request, map_id):
 @api_view(['POST'])
 def csv_points(request, map_id):
     if request.method == 'POST':
-        logged_in_user_id = request.user.username
+        LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
+        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
+        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
         datatouse = request.data.dict().keys()[0]
         datatouse = json.loads(datatouse)
         errors = []
@@ -204,8 +216,9 @@ def csv_points(request, map_id):
                     'longitude': item[u'longitude'],
                     'description': item[u'description'],
                     'external_url': item[u'externalurl'],
-                    'created_by': logged_in_user_id,
-                    'modified_by': logged_in_user_id,
+                    'created_by_id': logged_in_user_id,
+                    'created_by_full_name': logged_in_user_name,
+                    'modified_by_id': logged_in_user_id,
                     'date_created': timezone.now(),
                     'date_modified': timezone.now(),
                     }
