@@ -311,18 +311,6 @@
 				};
 			}]);
 
-
-
-
-
-
-
-
-
-
-
-
-
 	// THIS STUFF IS ALL FOR THE ANGULAR BOOTSTRAP MODAL
 	angular.module('app')
 		.controller('ModalDemoCtrl', function($scope, $uibModal, $log) {
@@ -366,17 +354,4 @@
 			};
 		});
 	// END STUFF FOR THE ANGULAR BOOTSTRAP MODAL
-
-
-
-
-
-
-
-
-
-
-
-
-
 })();

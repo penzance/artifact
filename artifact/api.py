@@ -119,7 +119,6 @@ def marker_collection(request, map_id):
         logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
         logger.debug(request.user)
         logger.debug(request.user.username)
-        # logger.debug(logged_in_user_name)
         logger.debug(logged_in_user_id)
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
