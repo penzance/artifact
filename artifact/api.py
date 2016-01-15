@@ -45,8 +45,8 @@ def map_collection(request, canvas_course_id):
 
     elif request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
         data = { 'canvas_course_id': canvas_course_id,
                  'title': request.data.get('title'),
                  'description': request.data.get('description'),
@@ -115,8 +115,8 @@ def marker_collection(request, map_id):
 
     elif request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
         logger.debug(request.user)
         logger.debug(request.user.username)
         logger.debug(logged_in_user_id)
@@ -203,8 +203,8 @@ def marker_collection(request, map_id):
 def csv_points(request, map_id):
     if request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
         datatouse = request.data.dict().keys()[0]
         datatouse = json.loads(datatouse)
         errors = []
