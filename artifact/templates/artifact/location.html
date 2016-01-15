@@ -17,224 +17,224 @@
 
 {% block body %}
 <body ng-app="app" ng-init="map_id={{map_id}}">
-	{% verbatim %}
+    {% verbatim %}
 
-	<div class="container" ng-controller="LocationController">
-		
-		<!--Begin right side bar-->
-		<div class="row">
-			<div class="col-xs-12 col-md-8">
-				<h1>{{maptitle}}</h1>
-				<h4>{{description}}</h4>
-				<br>
-				<p>Click the map to add a point.</p>
-			</div>
-		</div>
+    <div class="container" ng-controller="LocationController">
+        
+        <!--Begin right side bar-->
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <h1>{{maptitle}}</h1>
+                <h4>{{description}}</h4>
+                <br>
+                <p>Click the map to add a point.</p>
+            </div>
+        </div>
 
-		<div class="row">
-			<div class="col-xs-12 col-md-9">
-				<div id="map-canvas">
-				</div>
-				<div>
-					<p></p>
-					<button class="btn btn-primary" data-target="#singlepointmodal" data-toggle="modal" id="add-location"type="button">Add Single Marker (+)</button> 
-					<button class="btn btn-primary" data-target="#addlist"data-toggle="modal" id="add-list" type="button">Add Multiple Markers (+)</button>
-					<a class="btn btn-success" href="#" ng-click="downloadcsv()">Download all points (CSV)</a>
-				</div>
+        <div class="row">
+            <div class="col-xs-12 col-md-9">
+                <div id="map-canvas">
+                </div>
+                <div>
+                    <p></p>
+                    <button class="btn btn-primary" data-target="#singlepointmodal" data-toggle="modal" id="add-location"type="button">Add Single Marker (+)</button> 
+                    <button class="btn btn-primary" data-target="#addlist"data-toggle="modal" id="add-list" type="button">Add Multiple Markers (+)</button>
+                    <a class="btn btn-success" href="#" ng-click="downloadcsv()">Download all points (CSV)</a>
+                </div>
 
-			</div>
-				<div>
-					<h3>Markers</h3>
-					<table>
-						<tr id="class" ng-repeat="marker in markers | orderBy : 'title'">
-							<td>
-								<a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
-							</td>
-							<td>
-								<a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
-							</td>
-						</tr>
-					</table> 
-				</div>
+            </div>
+                <div>
+                    <h3>Markers</h3>
+                    <table>
+                        <tr id="class" ng-repeat="marker in markers | orderBy : 'title'">
+                            <td>
+                                <a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
+                            </td>
+                        </tr>
+                    </table> 
+                </div>
 
-		</div>
-		<div class="row">
-				<div class="col-xs-8 col-md-9">
-				<h3>{{point.title}}</h3>
+        </div>
+        <div class="row">
+                <div class="col-xs-8 col-md-9">
+                <h3>{{point.title}}</h3>
 
-				<p>{{point.description}}</p>
+                <p>{{point.description}}</p>
 
-				<p><a href="{{external_url}}">{{point.external_url}}</a>
-				</p>
-				<input type='button' id='hideshow' value='Show/Hide Street View'>
-				<div id="panorama-wrapper">
-					<p id="panorama-warning"></p>
-					<div id="panorama-canvas"></div>
-				</div>
-			</div>
-		</div>
-		<!--End right side bar-->
-		
-		
-		<!-- Begin add single point modal -->
-		<div class="modal fade" id="singlepointmodal" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" data-dismiss="modal" type="button">&times;</button>
+                <p><a href="{{external_url}}">{{point.external_url}}</a>
+                </p>
+                <input type='button' id='hideshow' value='Show/Hide Street View'>
+                <div id="panorama-wrapper">
+                    <p id="panorama-warning"></p>
+                    <div id="panorama-canvas"></div>
+                </div>
+            </div>
+        </div>
+        <!--End right side bar-->
+        
+        
+        <!-- Begin add single point modal -->
+        <div class="modal fade" id="singlepointmodal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-						<h4 class="modal-title">Add a new point to the map</h4>
-					</div>
+                        <h4 class="modal-title">Add a new point to the map</h4>
+                    </div>
 
-					<div class="modal-body">
-						<form id="form1" name="form1" ng-submit="processForm()">
-							<div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
-								<label class="control-label requiredField" for="id_title">Enter the title
-								(Required)</label> <input class="form-control" id="id_title" maxlength="50" name="title"
-								ng-model="formData.title" required="" type="text"> <span class="help-block" ng-show=
-								"errorTitle">{{ errorTitle }}</span>
-							</div>
+                    <div class="modal-body">
+                        <form id="form1" name="form1" ng-submit="processForm()">
+                            <div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
+                                <label class="control-label requiredField" for="id_title">Enter the title
+                                (Required)</label> <input class="form-control" id="id_title" maxlength="50" name="title"
+                                ng-model="formData.title" required="" type="text"> <span class="help-block" ng-show=
+                                "errorTitle">{{ errorTitle }}</span>
+                            </div>
 
-							<div class="form-group" id="description-group" ng-class=
-							"{ 'has-error' : errorDescription }">
-								<label class="control-label requiredField" for="id_description">Enter a description
-								(Required)</label> 
+                            <div class="form-group" id="description-group" ng-class=
+                            "{ 'has-error' : errorDescription }">
+                                <label class="control-label requiredField" for="id_description">Enter a description
+                                (Required)</label> 
 
-								<textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
-								"formData.description" required="" rows="10">
+                                <textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
+                                "formData.description" required="" rows="10">
 </textarea> <span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span>
-							</div>
+                            </div>
 
-							<h4>Enter either an address or set of coordinates. If you enter both, only the coordinates will be used.</h4>
+                            <h4>Enter either an address or set of coordinates. If you enter both, only the coordinates will be used.</h4>
 
-							<div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
-								<label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
-								id="id_latitude" maxlength="25" name="latitude" ng-model="formData.latitude" type="text">
-								<span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
-							</div>
+                            <div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
+                                <label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
+                                id="id_latitude" maxlength="25" name="latitude" ng-model="formData.latitude" type="text">
+                                <span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
+                            </div>
 
-							<div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
-								<label class="control-label" for="id_longitude">Longitude</label> <input class=
-								"form-control" id="id_longitude" maxlength="25" name="longitude" ng-model=
-								"formData.longitude" type="text"> <span class="help-block" ng-show="errorLongitude">{{
-								errorLongitude }}</span>
-							</div>
+                            <div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
+                                <label class="control-label" for="id_longitude">Longitude</label> <input class=
+                                "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model=
+                                "formData.longitude" type="text"> <span class="help-block" ng-show="errorLongitude">{{
+                                errorLongitude }}</span>
+                            </div>
 
-							<div class="form-group" id="address-group" ng-class="{ 'has-error' : errorAddress }">
-								<label class="control-label" for="id_address">Address</label> <input class="form-control"
-								id="id_address" maxlength="250" name="address" ng-model="formData.address" type="text">
-								<span class="help-block" ng-show="errorAddress">{{ errorAddress }}</span>
-							</div>
+                            <div class="form-group" id="address-group" ng-class="{ 'has-error' : errorAddress }">
+                                <label class="control-label" for="id_address">Address</label> <input class="form-control"
+                                id="id_address" maxlength="250" name="address" ng-model="formData.address" type="text">
+                                <span class="help-block" ng-show="errorAddress">{{ errorAddress }}</span>
+                            </div>
 
-							<div class="form-group" id="externalurl-group" ng-class=
-							"{ 'has-error' : errorExternalurl }">
-								<label class="control-label" for="id_externalurl">External URL</label> <input class=
-								"form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
-								"formData.externalurl" type="text"> <span class="help-block" ng-show=
-								"errorExternalurl">{{ errorExternalurl }}</span>
-							</div>
-						</form>
-					</div>
+                            <div class="form-group" id="externalurl-group" ng-class=
+                            "{ 'has-error' : errorExternalurl }">
+                                <label class="control-label" for="id_externalurl">External URL</label> <input class=
+                                "form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
+                                "formData.externalurl" type="text"> <span class="help-block" ng-show=
+                                "errorExternalurl">{{ errorExternalurl }}</span>
+                            </div>
+                        </form>
+                    </div>
 
-					<div class="modal-footer">
-						<button class="btn btn-primary" form="form1" type="submit">Save Marker</button>
-						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--End single point modal-->
-		
-		
-		<!-- Begin add multiple points modal -->
-		<div class="modal fade" id="addlist" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" form="form1" type="submit">Save Marker</button>
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End single point modal-->
+        
+        
+        <!-- Begin add multiple points modal -->
+        <div class="modal fade" id="addlist" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-						<h4 class="modal-title">Add a list of points to the map</h4>
-					</div>
+                        <h4 class="modal-title">Add a list of points to the map</h4>
+                    </div>
 
-					<div class="modal-body">
-						You can use this form to upload a list of points in a CSV file. You MUST enter points using
-						the following file as a template. You must keep the header row intact. (<a href=
-						"/static/artifact/csv/add_points_template.csv">Point Upload Template</a>)<br>
-						<br>
+                    <div class="modal-body">
+                        You can use this form to upload a list of points in a CSV file. You MUST enter points using
+                        the following file as a template. You must keep the header row intact. (<a href=
+                        "/static/artifact/csv/add_points_template.csv">Point Upload Template</a>)<br>
+                        <br>
 
-						<form enctype="multipart/form-data">
-							<input accept=".csv" id="files" type="file"> 
-						</form>
-					</div>
+                        <form enctype="multipart/form-data">
+                            <input accept=".csv" id="files" type="file"> 
+                        </form>
+                    </div>
 
-					<div class="modal-footer">
-					<button class="btn btn-primary" id="parse_csv" ng-click="uploadFile()" >Save
-						Markers</button>
-						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--End add multiple points modal-->
-	
-	<!-- Begin edit point modal -->
-	<div class="modal fade" id="editpoint" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <div class="modal-footer">
+                    <button class="btn btn-primary" id="parse_csv" ng-click="uploadFile()" >Save
+                        Markers</button>
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End add multiple points modal-->
+    
+    <!-- Begin edit point modal -->
+    <div class="modal fade" id="editpoint" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-					<h4 class="modal-title">Edit point</h4>
-				</div>
+                    <h4 class="modal-title">Edit point</h4>
+                </div>
 
-				<div class="modal-body">
-					Use this form to edit the selected point.<br>
-					<br>
+                <div class="modal-body">
+                    Use this form to edit the selected point.<br>
+                    <br>
 
-					<form id="form2" name="form2" ng-submit="processForm()">
-						<div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
-							<label class="control-label requiredField" for="id_title">Title</label> <input class=
-							"form-control" id="id_title" maxlength="50" name="title" ng-model="point.title" type="text">
-							<span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span>
-						</div>
+                    <form id="form2" name="form2" ng-submit="processForm()">
+                        <div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
+                            <label class="control-label requiredField" for="id_title">Title</label> <input class=
+                            "form-control" id="id_title" maxlength="50" name="title" ng-model="point.title" type="text">
+                            <span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span>
+                        </div>
 
-						<div class="form-group" id="description-group" ng-class="{ 'has-error' : errorDescription }">
-							<label class="control-label requiredField" for="id_description">Description</label> 
+                        <div class="form-group" id="description-group" ng-class="{ 'has-error' : errorDescription }">
+                            <label class="control-label requiredField" for="id_description">Description</label> 
 
-							<textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
-							"point.description" rows="10">
+                            <textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
+                            "point.description" rows="10">
 </textarea> <span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span>
-						</div>
+                        </div>
 
-						<div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
-							<label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
-							id="id_latitude" maxlength="25" name="latitude" ng-model="point.latitude" type="text">
-							<span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
-						</div>
+                        <div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
+                            <label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
+                            id="id_latitude" maxlength="25" name="latitude" ng-model="point.latitude" type="text">
+                            <span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
+                        </div>
 
-						<div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
-							<label class="control-label" for="id_longitude">Longitude</label> <input class=
-							"form-control" id="id_longitude" maxlength="25" name="longitude" ng-model="point.longitude"
-							type="text"> <span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span>
-						</div>
+                        <div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
+                            <label class="control-label" for="id_longitude">Longitude</label> <input class=
+                            "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model="point.longitude"
+                            type="text"> <span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span>
+                        </div>
 
-						<div class="form-group" id="externalurl-group" ng-class="{ 'has-error' : errorExternalurl }">
-							<label class="control-label" for="id_externalurl">External URL</label> <input class=
-							"form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
-							"point.externalurl" type="text"> <span class="help-block" ng-show="errorExternalurl">{{
-							errorExternalurl }}</span>
-						</div>
-						<button class="btn btn-primary" form="form2" type="submit">Save Changes</button>
-						<button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <div class="form-group" id="externalurl-group" ng-class="{ 'has-error' : errorExternalurl }">
+                            <label class="control-label" for="id_externalurl">External URL</label> <input class=
+                            "form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
+                            "point.externalurl" type="text"> <span class="help-block" ng-show="errorExternalurl">{{
+                            errorExternalurl }}</span>
+                        </div>
+                        <button class="btn btn-primary" form="form2" type="submit">Save Changes</button>
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -265,7 +265,7 @@
 
 
 
-	{% endverbatim %}
+    {% endverbatim %}
 </body>
 
 {% endblock body %}
