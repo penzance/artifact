@@ -11,7 +11,7 @@ flanker==0.4.34
 ndg-httpsclient==0.4.0
 djangorestframework
 django-rest-swagger
-git+http://git@github.com/penzance/canvas_python_sdk.git@v0.8.1#egg=canvas-python-sdk==0.8.1
+git+http://git@github.com/penzance/canvas_python_sdk.git@v0.8.4#egg=canvas-python-sdk==0.8.4
 #git+http://git@github.com/Harvard-University-iCommons/django-icommons-common.git@v1.9.25#egg=django-icommons-common==1.9.25
 #git+http://git@github.com/Harvard-University-iCommons/django-icommons-ui.git@v0.9.8#egg=django-icommons-ui==0.9.8
-git+http://git@github.com/Harvard-University-iCommons/django-auth-lti.git@v1.2.2#egg=django-auth-lti==1.2.2
+git+http://git@github.com/Harvard-University-iCommons/django-auth-lti.git@v1.2.4#egg=django-auth-lti==1.2.4

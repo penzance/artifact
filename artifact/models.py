@@ -20,12 +20,14 @@ class Map(models.Model):
 
     canvas_course_id = models.IntegerField()
     title = models.CharField(max_length=250)
+    description = models.CharField(max_length=500)
     latitude = models.CharField(max_length=32)
     longitude = models.CharField(max_length=32)
     zoom = models.IntegerField()
     maptype = models.IntegerField(choices=MAP_TYPE_CHOICES, default=ROADMAP)
-    created_by = models.CharField(max_length=32)
-    modified_by = models.CharField(max_length=32)
+    created_by_id = models.CharField(max_length=32)
+    modified_by_id = models.CharField(max_length=32)
+    created_by_full_name = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
 
@@ -39,8 +41,16 @@ class Map(models.Model):
 
     @property
     def thumbnail(self):
+        if self.maptype == 1:
+            map_type = 'satellite'
+        elif self.maptype == 2:
+            map_type = 'roadmap'
+        elif self.maptype == 3:
+            map_type = 'hybrid'
+        elif self.maptype == 4:
+            map_type = 'terrain'
         return settings.MAP_THUMBNAIL_URL.format(latitude=self.latitude, longitude=self.longitude,
-                                                 zoom=self.zoom, maptype=self.maptype)
+                                                 zoom=self.zoom, maptype=map_type)
 
 
 class Markers(models.Model):
@@ -49,9 +59,10 @@ class Markers(models.Model):
     latitude = models.CharField(max_length=32)
     longitude = models.CharField(max_length=32)
     description = models.CharField(max_length=2000)
-    external_url = models.CharField(max_length=250)
-    created_by = models.CharField(max_length=32)
-    modified_by = models.CharField(max_length=32)
+    external_url = models.CharField(max_length=250, default="")
+    created_by_id = models.CharField(max_length=32)
+    modified_by_id = models.CharField(max_length=32)
+    created_by_full_name = models.CharField(max_length=32)
     date_created = models.DateTimeField(blank=True, default=timezone.now)
     date_modified = models.DateTimeField(blank=True, default=timezone.now)
 
