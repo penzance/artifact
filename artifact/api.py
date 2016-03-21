@@ -127,15 +127,15 @@ def marker_collection(request, map_id):
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
         address = request.data.get('address')
+        if request.data.get('externalurl'):
+            logger.debug("We got it")
+            externalurl = request.data.get('externalurl')
+        else:
+            logger.debug("we didnt get it")
+            externalurl = "none_provided"
 
         # lat/long points take precedence over addresses
         if latitude is not None and longitude is not None:
-            if request.data.get('externalurl'):
-                logger.debug("We got it")
-                externalurl = request.data.get('externalurl')
-            else:
-                logger.debug("we didnt get it")
-                externalurl = "none_provided"
             data = {'title': request.data.get('title'),
                     'map': map_id,
                     'latitude': request.data.get('latitude'),
@@ -176,7 +176,7 @@ def marker_collection(request, map_id):
                         'latitude': latitude,
                         'longitude': longitude,
                         'description': request.data.get('description'),
-                        'external_url': request.data.get('externalurl'),
+                        'external_url': externalurl,
                         'fileupload': request.data.get('fileupload'),
                         'created_by_id': logged_in_user_id,
                         'created_by_full_name': logged_in_user_name,
