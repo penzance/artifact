@@ -1,0 +1,16 @@
+SECURE_SETTINGS = {
+   'enable_debug': True,
+   'canvas_token': 'CHANGE_ME',
+   'canvas_url': 'https://canvas.icommons.harvard.edu',
+
+   'lti_oauth_credentials': {
+       'test': 'secret',
+   },
+
+   'db_default_backend': 'django.db.backends.postgresql_psycopg2',
+   'db_default_name': 'vagrant',
+   'db_default_user': 'vagrant',
+   'db_default_password': 'vagrant',
+   'db_default_host': 'localhost',
+   'db_default_port': 5432,
+}
