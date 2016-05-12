@@ -18,8 +18,8 @@
 {% block body %}
 <body ng-app="app" ng-init="map_id={{map_id}}">
     {% verbatim %}
-
-    <div class="container" ng-controller="LocationController">
+<div ng-controller="LocationController">
+    <div class="container">
         
         <!--Begin right side bar-->
         <div class="row">
@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <p></p>
-                    <button class="btn btn-primary" data-target="#singlepointmodal" data-toggle="modal" id="add-location"type="button">Add Single Marker (+)</button> 
+                    <button class="btn btn-primary" data-target="#singlepointmodal" data-toggle="modal" id="add-location"type="button" ng-click="clear()">Add Single Marker (+)</button> 
                     <button class="btn btn-primary" data-target="#addlist"data-toggle="modal" id="add-list" type="button">Add Multiple Markers (+)</button>
                     <a class="btn btn-success" href="#" ng-click="downloadcsv()">Download all points (CSV)</a>
                 </div>
@@ -51,7 +51,7 @@
                                 <a href="#" ng-click="selectMarker($event, marker)">{{marker.title}}</a>
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal">CLICK TO EDIT</a><br>
+                                <a class="btn btn-xs btn-warning" data-target="#editpoint" data-toggle="modal" ng-click="editMarker($event, marker)">CLICK TO EDIT</a><br>
                             </td>
                         </tr>
                     </table> 
@@ -63,8 +63,7 @@
                 <h3>{{point.title}}</h3>
 
                 <p>{{point.description}}</p>
-
-                <p><a href="{{external_url}}">{{point.external_url}}</a>
+                <p><a href="{{point.external_url == 'none_provided' ? '' : point.external_url}}">{{point.external_url == "none_provided" ? '' : point.external_url}}</a>
                 </p>
                 <input type='button' id='hideshow' value='Show/Hide Street View'>
                 <div id="panorama-wrapper">
@@ -194,11 +193,10 @@
                 <div class="modal-body">
                     Use this form to edit the selected point.<br>
                     <br>
-
-                    <form id="form2" name="form2" ng-submit="processForm()">
+                    <form id="form2" name="form2" ng-submit="updateForm()">
                         <div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
                             <label class="control-label requiredField" for="id_title">Title</label> <input class=
-                            "form-control" id="id_title" maxlength="50" name="title" ng-model="point.title" type="text">
+                            "form-control" id="id_title" maxlength="50" name="title" ng-model="updateData.title" type="text">
                             <span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span>
                         </div>
 
@@ -206,26 +204,26 @@
                             <label class="control-label requiredField" for="id_description">Description</label> 
 
                             <textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
-                            "point.description" rows="10">
+                            "updateData.description" rows="10">
 </textarea> <span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span>
                         </div>
 
                         <div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
                             <label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
-                            id="id_latitude" maxlength="25" name="latitude" ng-model="point.latitude" type="text">
+                            id="id_latitude" maxlength="25" name="latitude" ng-model="updateData.latitude" type="text">
                             <span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
                         </div>
 
                         <div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
                             <label class="control-label" for="id_longitude">Longitude</label> <input class=
-                            "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model="point.longitude"
+                            "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model="updateData.longitude"
                             type="text"> <span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span>
                         </div>
 
                         <div class="form-group" id="externalurl-group" ng-class="{ 'has-error' : errorExternalurl }">
                             <label class="control-label" for="id_externalurl">External URL</label> <input class=
                             "form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
-                            "point.externalurl" type="text"> <span class="help-block" ng-show="errorExternalurl">{{
+                            "updateData.external_url" type="text"> <span class="help-block" ng-show="errorExternalurl">{{
                             errorExternalurl }}</span>
                         </div>
                         <button class="btn btn-primary" form="form2" type="submit">Save Changes</button>
@@ -235,38 +233,9 @@
             </div>
         </div>
     </div>
-
-
-
-
-<div ng-controller="ModalDemoCtrl">
-    <script type="text/ng-template" id="myModalContent">
-        <div class="modal-header">
-            <h3 class="modal-title">Im a modal!</h3>
-        </div>
-        <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-
-    <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
-    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 </div>
-
-
-
 
     {% endverbatim %}
 </body>
 
 {% endblock body %}
-
