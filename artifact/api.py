@@ -45,20 +45,20 @@ def map_collection(request, canvas_course_id):
 
     elif request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
-        data = { 'canvas_course_id': canvas_course_id,
-                 'title': request.data.get('title'),
-                 'description': request.data.get('description'),
-                 'latitude': request.data.get('latitude'),
-                 'longitude': request.data.get('longitude'),
-                 'zoom': int(request.data.get('zoom')),
-                 'maptype': int(request.data.get('maptype')),
-                 'date_modified': timezone.now(),
-                 'created_by_id': logged_in_user_id,
-                 'created_by_full_name': logged_in_user_name,
-                 'modified_by_id': logged_in_user_id,
-                 }
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
+        data = {'canvas_course_id': canvas_course_id,
+                'title': request.data.get('title'),
+                'description': request.data.get('description'),
+                'latitude': request.data.get('latitude'),
+                'longitude': request.data.get('longitude'),
+                'zoom': int(request.data.get('zoom')),
+                'maptype': int(request.data.get('maptype')),
+                'date_modified': timezone.now(),
+                'created_by_id': logged_in_user_id,
+                'created_by_full_name': logged_in_user_name,
+                'modified_by_id': logged_in_user_id,
+                }
 
         serializer = MapSerializer(data=data)
 
@@ -94,10 +94,14 @@ def download_csv(request, map_id):
     if request.method == 'GET':
         serializer = MapSerializer(map)
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="downloaded_points.csv"'
-        fieldnames = ['title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by_full_name', 'date_created', 'date_modified']
-        writer = csv.DictWriter(response, fieldnames=fieldnames, extrasaction='ignore')
+        response[
+            'Content-Disposition'] = 'attachment; filename="downloaded_points.csv"'
+        fieldnames = ['title', 'map', 'latitude', 'longitude', 'description',
+                      'external_url', 'created_by_full_name', 'date_created', 'date_modified']
+        writer = csv.DictWriter(
+            response, fieldnames=fieldnames, extrasaction='ignore')
         writer.writeheader()
+        # print len(serializer.data['markers'])
         for dictionary in serializer.data['markers']:
             writer.writerow(dictionary)
         return response
@@ -115,24 +119,23 @@ def marker_collection(request, map_id):
 
     elif request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
         logger.debug(request.user)
         logger.debug(request.user.username)
-        # logger.debug(logged_in_user_name)
         logger.debug(logged_in_user_id)
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
         address = request.data.get('address')
+        if request.data.get('externalurl'):
+            logger.debug("We got it")
+            externalurl = request.data.get('externalurl')
+        else:
+            logger.debug("we didnt get it")
+            externalurl = "none_provided"
 
         # lat/long points take precedence over addresses
         if latitude is not None and longitude is not None:
-            if request.data.get('externalurl'):
-                logger.debug("We got it")
-                externalurl = request.data.get('externalurl')
-            else:
-                logger.debug("we didnt get it")
-                externalurl = "none_provided"
             data = {'title': request.data.get('title'),
                     'map': map_id,
                     'latitude': request.data.get('latitude'),
@@ -158,22 +161,22 @@ def marker_collection(request, map_id):
 
         elif address:
             address = urllib.quote(address.encode("utf-8"))
-            url = 'http://maps.googleapis.com/maps/api/geocode/json?address='+address+'&sensor=true'
+            url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' + \
+                address + '&sensor=true'
             data = urllib2.urlopen(url).read()
             json_data = json.loads(data)
             stat = json_data.get('status')
 
             if stat in 'OK':
-                result = json_data['results'][0]         
+                result = json_data['results'][0]
                 latitude = result['geometry']['location']['lat']
                 longitude = result['geometry']['location']['lng']
-                
                 data = {'title': request.data.get('title'),
                         'map': map_id,
                         'latitude': latitude,
                         'longitude': longitude,
                         'description': request.data.get('description'),
-                        'external_url': request.data.get('externalurl'),
+                        'external_url': externalurl,
                         'fileupload': request.data.get('fileupload'),
                         'created_by_id': logged_in_user_id,
                         'created_by_full_name': logged_in_user_name,
@@ -181,21 +184,43 @@ def marker_collection(request, map_id):
                         'date_created': timezone.now(),
                         'date_modified': timezone.now(),
                         }
-
                 serializer = MarkersSerializer(data=data)
                 if serializer.is_valid():
                     serializer.save()
                     return Response({'latitude': latitude, 'longitude': longitude}, status=status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
             else:
                 errors = ['Address not found!']
                 return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
-        
         else:
-            errors = ['You did not enter either an address or lat/long. Try again.']
+            errors = [
+                'You did not enter either an address or lat/long. Try again.']
             return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Generate the points for the selected map and process single point upload
+@login_required
+@api_view(['POST'])
+def updatePoint(request, point_id):
+    LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
+    logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+    data = {'title': request.data.get('title'),
+    'latitude': request.data.get('latitude'),
+    'longitude': request.data.get('longitude'),
+    'description': request.data.get('description'),
+    'external_url': request.data.get('externalurl'),
+    'fileupload': request.data.get('fileupload'),
+    'modified_by_id': logged_in_user_id,
+    'date_modified': timezone.now(),
+            }
+    point = Markers.objects.get(pk=point_id)
+    point.title = data.title
+    point.latitude = data.latitude
+    point.longitude = data.longitude
+    point.description = data.description
+    point.external_url = data.external_url
+    point.save()
+    return Response(status=status.HTTP_201_CREATED)
 
 
 # Uploading multiple points via CSV file
@@ -204,8 +229,8 @@ def marker_collection(request, map_id):
 def csv_points(request, map_id):
     if request.method == 'POST':
         LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
-        logged_in_user_id = LTI_LAUNCH['lis_person_sourcedid']
-        logged_in_user_name = LTI_LAUNCH['lis_person_name_full']
+        logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+        logged_in_user_name = LTI_LAUNCH.get('lis_person_name_full')
         datatouse = request.data.dict().keys()[0]
         datatouse = json.loads(datatouse)
         errors = []
@@ -222,7 +247,6 @@ def csv_points(request, map_id):
                     'date_created': timezone.now(),
                     'date_modified': timezone.now(),
                     }
-
             serializer = MarkersSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
