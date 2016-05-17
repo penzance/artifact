@@ -85,6 +85,7 @@
                         position: new google.maps.LatLng(info.latitude, info.longitude),
                         title: info.title
                     });
+                    marker.id = info.id || undefined;
                     marker.description = info.description;
                     marker.external_url = info.external_url;
                     marker.latitude = info.latitude;
@@ -196,8 +197,8 @@
                         $scope.newmarker_window.close($scope.map, this);
                     };
                     $scope.editMarker = function(e, marker) {
-                        var test = marker;
-                        $scope.updateData = test;
+                        $scope.updateData = {};
+                        $scope.updateData = $.extend(true, {}, marker);
                         $scope.selectedMarker = marker.id;
 
                     };
@@ -248,7 +249,9 @@
                             } // set the headers so angular passing info as form data (not request payload)
                         })
                         .then(function(data) {
+                            // TODO update marker instead of creating new one
                             createMarker({
+                                'id': $scope.updateData.id,
                                 'title': $scope.updateData.title,
                                 'latitude': $scope.updateData.latitude,
                                 'longitude': $scope.updateData.longitude,

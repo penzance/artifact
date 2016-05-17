@@ -180,59 +180,64 @@
     <!--End add multiple points modal-->
     
     <!-- Begin edit point modal -->
-    <div class="modal fade" id="editpoint" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+            <div class="modal fade" id="editpoint" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-                    <h4 class="modal-title">Edit point</h4>
-                </div>
+                        <h4 class="modal-title">Edit point</h4>
+                    </div>
 
-                <div class="modal-body">
-                    Use this form to edit the selected point.<br>
-                    <br>
-                    <form id="form2" name="form2" ng-submit="updateForm()">
-                        <div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
-                            <label class="control-label requiredField" for="id_title">Title</label> <input class=
-                            "form-control" id="id_title" maxlength="50" name="title" ng-model="updateData.title" type="text">
-                            <span class="help-block" ng-show="errorTitle">{{ errorTitle }}</span>
-                        </div>
+                    <div class="modal-body">
+                        <form id="form2" name="form2" ng-submit="updateForm()">
+                            <div class="form-group" id="title-group" ng-class="{ 'has-error' : errorTitle }">
+                                <label class="control-label requiredField" for="id_title">Title
+                                </label> <input class="form-control" id="id_title" maxlength="50" name="title"
+                                ng-model="updateData.title" required="" type="text"> <span class="help-block" ng-show=
+                                "errorTitle">{{ errorTitle }}</span>
+                            </div>
 
-                        <div class="form-group" id="description-group" ng-class="{ 'has-error' : errorDescription }">
-                            <label class="control-label requiredField" for="id_description">Description</label> 
-
-                            <textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
-                            "updateData.description" rows="10">
+                            <div class="form-group" id="description-group" ng-class=
+                            "{ 'has-error' : errorDescription }">
+                                <label class="control-label requiredField" for="id_description">Description
+                                (Required)</label> 
+                                <textarea class="form-control" cols="30" id="id_description" name="description" ng-model=
+                                "updateData.description" required="" rows="10">
 </textarea> <span class="help-block" ng-show="errorDescription">{{ errorDescription }}</span>
-                        </div>
+                            </div>
+                            <div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
+                                <label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
+                                id="id_latitude" maxlength="25" name="latitude" ng-model="updateData.latitude" type="text">
+                                <span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
+                            </div>
 
-                        <div class="form-group" id="latitude-group" ng-class="{ 'has-error' : errorlatitude }">
-                            <label class="control-label" for="id_latitude">Latitude</label> <input class="form-control"
-                            id="id_latitude" maxlength="25" name="latitude" ng-model="updateData.latitude" type="text">
-                            <span class="help-block" ng-show="errorLatitude">{{ errorlatitude }}</span>
-                        </div>
+                            <div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
+                                <label class="control-label" for="id_longitude">Longitude</label> <input class=
+                                "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model=
+                                "updateData.longitude" type="text"> <span class="help-block" ng-show="errorLongitude">{{
+                                errorLongitude }}</span>
+                            </div>
 
-                        <div class="form-group" id="longitude-group" ng-class="{ 'has-error' : errorLongitude }">
-                            <label class="control-label" for="id_longitude">Longitude</label> <input class=
-                            "form-control" id="id_longitude" maxlength="25" name="longitude" ng-model="updateData.longitude"
-                            type="text"> <span class="help-block" ng-show="errorLongitude">{{ errorLongitude }}</span>
-                        </div>
+                            <div class="form-group" id="externalurl-group" ng-class=
+                            "{ 'has-error' : errorExternalurl }">
+                                <label class="control-label" for="id_externalurl">External URL</label> <input class=
+                                "form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
+                                "updateData.externalurl" type="text"> <span class="help-block" ng-show=
+                                "errorExternalurl">{{ errorExternalurl }}</span>
+                            </div>
+                        </form>
+                    </div>
 
-                        <div class="form-group" id="externalurl-group" ng-class="{ 'has-error' : errorExternalurl }">
-                            <label class="control-label" for="id_externalurl">External URL</label> <input class=
-                            "form-control" id="id_externalurl" maxlength="250" name="externalurl" ng-model=
-                            "updateData.external_url" type="text"> <span class="help-block" ng-show="errorExternalurl">{{
-                            errorExternalurl }}</span>
-                        </div>
-                        <button class="btn btn-primary" form="form2" type="submit">Save Changes</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" form="form2" type="submit">Update Marker</button>
                         <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 
     {% endverbatim %}
