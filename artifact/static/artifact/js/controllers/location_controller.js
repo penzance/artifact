@@ -7,6 +7,7 @@
             {
                 var GET_LOC = $djangoUrl.reverse('artifact:map_location', [$scope.map_id]);
                 var GET_MARKERS = $djangoUrl.reverse('artifact:markers', [$scope.map_id]);
+                var UPDATE_MARKER = $djangoUrl.reverse('artifact:updatePoint', [$scope.selectedMarker]);
                 var GET_CSV = $djangoUrl.reverse('artifact:csv_points', [$scope.map_id]);
                 var DOWNLOAD_CSV = $djangoUrl.reverse('artifact:download_csv', [$scope.map_id]);
                 var responsePromise = $http.get(GET_LOC);
@@ -84,13 +85,17 @@
                         position: new google.maps.LatLng(info.latitude, info.longitude),
                         title: info.title
                     });
+                    marker.id = info.id || undefined;
                     marker.description = info.description;
                     marker.external_url = info.external_url;
+                    marker.latitude = info.latitude;
+                    marker.longitude = info.longitude;
                     $scope.markers.push(marker);
                     marker.setMap($scope.map);
 
                     // on map click, put temporary marker that can be used to create a new point
                     var newmarker;
+                    $scope.formData = {};
 
                     function placeMarker(location) {
                         var pinColor = "008000";
@@ -120,8 +125,13 @@
                                 $scope.point.title = 'New point';
                                 $scope.point.description = '';
                                 $scope.point.external_url = '';
+                                $scope.point.latitude = event.latLng.lat();
+                                $scope.point.longitude = event.latLng.lng();
                                 setPanorama(event.latLng);
+                                $scope.formData.latitude = $scope.point.latitude;
+                                $scope.formData.longitude = $scope.point.longitude;
                                 $scope.$apply();
+                                ;
                             });
                         }
                     }
@@ -186,6 +196,12 @@
                         $scope.infowindow.open($scope.map, marker);
                         $scope.newmarker_window.close($scope.map, this);
                     };
+                    $scope.editMarker = function(e, marker) {
+                        $scope.updateData = {};
+                        $scope.updateData = $.extend(true, {}, marker);
+                        $scope.selectedMarker = marker.id;
+
+                    };
 
                     $scope.point = [];
                     $scope.markers = [];
@@ -197,7 +213,6 @@
 
 
                 // adds a single point to the map
-                $scope.formData = {};
                 $scope.processForm = function() {
                     $http({
                             method: 'POST',
@@ -216,7 +231,35 @@
                                 'external_url': $scope.formData.externalurl,
                                 'fileupload': $scope.formData.fileupload,
                             });
+                            $scope.formData = {};
                             $('#singlepointmodal')
+                                .modal('hide');
+                        });
+                };
+                $scope.clear = function(){
+                    $scope.formData = {};
+                }
+                $scope.updateForm = function() {
+                    $http({
+                            method: 'POST',
+                            url: UPDATE_MARKER,
+                            data: $.param($scope.updateData),
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            } // set the headers so angular passing info as form data (not request payload)
+                        })
+                        .then(function(data) {
+                            // TODO update marker instead of creating new one
+                            createMarker({
+                                'id': $scope.updateData.id,
+                                'title': $scope.updateData.title,
+                                'latitude': $scope.updateData.latitude,
+                                'longitude': $scope.updateData.longitude,
+                                'description': $scope.updateData.description,
+                                'external_url': $scope.updateData.externalurl,
+                                'fileupload': $scope.updateData.fileupload,
+                            });
+                            $('#editpoint')
                                 .modal('hide');
                         });
                 };
@@ -312,48 +355,4 @@
                         });
                 };
    }]);
-
-    // THIS STUFF IS ALL FOR THE ANGULAR BOOTSTRAP MODAL
-    angular.module('app')
-        .controller('ModalDemoCtrl', function($scope, $uibModal, $log) {
-            $scope.items = ['item1', 'item2', 'item3'];
-            $scope.animationsEnabled = true;
-            $scope.open = function(size) {
-                var modalInstance = $uibModal.open({
-                    animation: $scope.animationsEnabled,
-                    template: '#myModalContent',
-                    controller: 'ModalInstanceCtrl',
-                    size: size,
-                    resolve: {
-                        items: function() {
-                            return $scope.items;
-                        }
-                    }
-                });
-                modalInstance.result.then(function(selectedItem) {
-                    $scope.selected = selectedItem;
-                }, function() {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
-            };
-            $scope.toggleAnimation = function() {
-                $scope.animationsEnabled = !$scope.animationsEnabled;
-            };
-        });
-    // Please note that $modalInstance represents a modal window (instance) dependency.
-    // It is not the same as the $uibModal service used above.
-    angular.module('app')
-        .controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items) {
-            $scope.items = items;
-            $scope.selected = {
-                item: $scope.items[0]
-            };
-            $scope.ok = function() {
-                $uibModalInstance.close($scope.selected.item);
-            };
-            $scope.cancel = function() {
-                $uibModalInstance.dismiss('cancel');
-            };
-        });
-    // END STUFF FOR THE ANGULAR BOOTSTRAP MODAL
 })();

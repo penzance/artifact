@@ -6,7 +6,7 @@ class MarkersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Markers
-        fields = ('title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by_id', 'created_by_full_name', 'modified_by_id',
+        fields = ('id','title', 'map', 'latitude', 'longitude', 'description', 'external_url', 'created_by_id', 'created_by_full_name', 'modified_by_id',
         	'date_created', 'date_modified')
 
 

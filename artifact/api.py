@@ -198,6 +198,30 @@ def marker_collection(request, map_id):
                 'You did not enter either an address or lat/long. Try again.']
             return JSONResponse(errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Generate the points for the selected map and process single point upload
+@login_required
+@api_view(['POST'])
+def updatePoint(request, point_id):
+    LTI_LAUNCH = request.session.get("LTI_LAUNCH").values()[0]
+    logged_in_user_id = LTI_LAUNCH.get('lis_person_sourcedid')
+    data = {'title': request.data.get('title'),
+    'latitude': request.data.get('latitude'),
+    'longitude': request.data.get('longitude'),
+    'description': request.data.get('description'),
+    'external_url': request.data.get('externalurl'),
+    'fileupload': request.data.get('fileupload'),
+    'modified_by_id': logged_in_user_id,
+    'date_modified': timezone.now(),
+            }
+    point = Markers.objects.get(pk=point_id)
+    point.title = data.title
+    point.latitude = data.latitude
+    point.longitude = data.longitude
+    point.description = data.description
+    point.external_url = data.external_url
+    point.save()
+    return Response(status=status.HTTP_201_CREATED)
+
 
 # Uploading multiple points via CSV file
 @login_required
